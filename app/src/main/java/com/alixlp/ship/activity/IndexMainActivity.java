@@ -118,6 +118,11 @@ public class IndexMainActivity extends AppCompatActivity implements
     }
 
     @Override
+    protected void onResume() {
+        super.onResume();
+    }
+
+    @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         ((ViewPager) findViewById(R.id.content)).setCurrentItem(TabFragment.from(item.getItemId()
         ).ordinal());
@@ -147,5 +152,6 @@ public class IndexMainActivity extends AppCompatActivity implements
             finish();
             return;
         }
+        Log.d(TAG, "toActivity: end userid = " + userId + ",token =" + token);
     }
 }

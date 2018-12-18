@@ -6,6 +6,8 @@ import com.alixlp.ship.net.CommonCallback;
 import com.alixlp.ship.util.SPUtils;
 import com.zhy.http.okhttp.OkHttpUtils;
 
+import java.util.List;
+
 public class UserBiz {
     private static final String TAG = "UserBiz-app";
 
@@ -34,7 +36,7 @@ public class UserBiz {
      *
      * @param commonCallback
      */
-    public void logout(CommonCallback<User> commonCallback) {
+    public void logout(CommonCallback<List> commonCallback) {
         String baseUrl = "http://" + SPUtils.getInstance().get(Config.APIURL, "") +
                 "/api.php";
         String token = (String) SPUtils.getInstance().get(Config.TOKEN, "");

@@ -20,6 +20,8 @@ import com.alixlp.ship.util.SPUtils;
 import com.alixlp.ship.util.T;
 import com.suke.widget.SwitchButton;
 
+import java.util.List;
+
 
 public class SettingActivity extends BaseActivity {
 
@@ -60,7 +62,7 @@ public class SettingActivity extends BaseActivity {
                 SPUtils.getInstance().put(Config.USERID, 0);
                 SPUtils.getInstance().put(Config.APIURL, apiUrl);
                 // 跳轉登錄
-                Intent intent = new Intent(SettingActivity.this, LoginActivity.class);
+                Intent intent = new Intent(SettingActivity.this, IndexMainActivity.class);
                 startActivity(intent);
                 finish();
             }
@@ -85,6 +87,19 @@ public class SettingActivity extends BaseActivity {
                 SPUtils.getInstance().put(Config.TOKEN, "");
                 SPUtils.getInstance().put(Config.KUAIDIID, 0);
                 startActivity(new Intent(SettingActivity.this, IndexMainActivity.class));
+/*                mUserBiz.logout(new CommonCallback<List>() {
+                    @Override
+                    public void onError(Exception e) {
+                        T.showToast(e.getMessage());
+                    }
+
+                    @Override
+                    public void onSuccess(List response, String info) {
+                        if (!info.equals("ok")) {
+                            T.showToast(info);
+                        }
+                    }
+                });*/
             }
         });
     }
