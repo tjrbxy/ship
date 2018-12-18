@@ -38,4 +38,13 @@ public class Goods {
         this.title = title;
     }
 
+    @Override
+    public String toString() {
+        return "Goods{" +
+                "id=" + id +
+                ", num=" + num +
+                ", gid=" + gid +
+                ", title='" + title + '\'' +
+                '}';
+    }
 }

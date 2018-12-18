@@ -83,6 +83,7 @@ public class SettingActivity extends BaseActivity {
                 T.showToast("退出成功！");
                 SPUtils.getInstance().put(Config.USERID, 0);
                 SPUtils.getInstance().put(Config.TOKEN, "");
+                SPUtils.getInstance().put(Config.KUAIDIID, 0);
                 startActivity(new Intent(SettingActivity.this, IndexMainActivity.class));
             }
         });

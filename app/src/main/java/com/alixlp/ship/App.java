@@ -26,7 +26,8 @@ public class App extends Application {
         SmartRefreshLayout.setDefaultRefreshHeaderCreator(new DefaultRefreshHeaderCreator() {
             @NonNull
             @Override
-            public RefreshHeader createRefreshHeader(@NonNull Context context, @NonNull RefreshLayout layout) {
+            public RefreshHeader createRefreshHeader(@NonNull Context context, @NonNull
+                    RefreshLayout layout) {
                 layout.setPrimaryColorsId(R.color.colorPrimary, android.R.color.white);//全局设置主题颜色
                 return new ClassicsHeader(context).setTimeFormat(new DynamicTimeFormat("更新于 %s"));
             }
@@ -36,6 +37,7 @@ public class App extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+        // 内存泄漏检测
         if (LeakCanary.isInAnalyzerProcess(this)) {
             // This process is dedicated to LeakCanary for heap analysis.
             // You should not init your app in this process.

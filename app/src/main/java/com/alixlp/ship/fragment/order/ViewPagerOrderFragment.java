@@ -89,7 +89,7 @@ public class ViewPagerOrderFragment extends Fragment implements OnRefreshListene
         });
 
         mRefreshLayout = (RefreshLayout) root.findViewById(refreshLayout);
-        mRefreshLayout.setOnRefreshLoadMoreListener(this);
+        mRefreshLayout.setOnRefreshLoadMoreListener(this); // 刷新和加载监听器
         mRefreshLayout.setRefreshHeader(new ClassicsHeader(getContext()));
         mRefreshLayout.setRefreshFooter(new ClassicsFooter(getContext()));
 
@@ -98,7 +98,23 @@ public class ViewPagerOrderFragment extends Fragment implements OnRefreshListene
         // viewPager 适配器
         mViewPagerAdapter = new ViewPagerAdapter(Item.values());
         mViewPager.setAdapter(mViewPagerAdapter);
-        mViewPager.setOffscreenPageLimit(1);
+        // mViewPager.setOffscreenPageLimit(1);
+        mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int i, float v, int i1) {
+
+            }
+
+            @Override
+            public void onPageSelected(int i) {
+                // mRefreshLayout.autoRefresh();  // 选中自动刷新
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int i) {
+
+            }
+        });
         mTabLayout.setupWithViewPager(mViewPager, true);
     }
 
@@ -203,7 +219,13 @@ public class ViewPagerOrderFragment extends Fragment implements OnRefreshListene
                     holder.text(R.id.id_tv_name, model.getName());
                     holder.text(R.id.id_tv_tel, model.getTel());
                     holder.text(R.id.id_tv_address, model.getAddress());
-                    holder.text(R.id.id_tv_goods, model.getGoods());
+                    String goods = "";
+                    for (int index = 0; index < model.getGoods().size(); index++) {
+                        goods += model.getGoods().get(index).getTitle() + " * " + model.getGoods
+                                ().get
+                                (index).getNum() + "\n";
+                    }
+                    holder.text(R.id.id_tv_goods, goods);
                     holder.textColorId(R.id.id_tv_name, R.color.colorTextName);
                 }
             };
@@ -236,7 +258,7 @@ public class ViewPagerOrderFragment extends Fragment implements OnRefreshListene
                 }
 
                 @Override
-                public void onSuccess(List<Order> response) {
+                public void onSuccess(List<Order> response, String info) {
                     if (response.size() == 0) {
                         T.showToast("木有订单了。");
                         return;
@@ -262,7 +284,7 @@ public class ViewPagerOrderFragment extends Fragment implements OnRefreshListene
                 }
 
                 @Override
-                public void onSuccess(List<Order> response) {
+                public void onSuccess(List<Order> response, String info) {
                     if (response.size() == 0) {
                         T.showToast("木有订单了。");
                     }
@@ -289,7 +311,7 @@ public class ViewPagerOrderFragment extends Fragment implements OnRefreshListene
                 }
 
                 @Override
-                public void onSuccess(List<Order> response) {
+                public void onSuccess(List<Order> response, String info) {
                     if (response.size() == 0) {
                         T.showToast("数据全部加载完毕");
                         refreshLayout.finishLoadMoreWithNoMoreData();//将不会再次触发加载更多事件

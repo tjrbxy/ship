@@ -57,10 +57,12 @@ public class LoginActivity extends BaseActivity {
                     }
 
                     @Override
-                    public void onSuccess(User response) {
+                    public void onSuccess(User response, String info) {
                         Log.d(TAG, "onSuccess: " + response);
                         stopLoadingProgress();
-                        T.showToast("登陆成功");
+                        if (!info.equals("ok")) {
+                            T.showToast(info);
+                        }
                         // 保存用户信息
                         SPUtils.getInstance().put(Config.TOKEN, response.getToken()); // 記錄Token
                         SPUtils.getInstance().put(Config.USERID, response.getId());  // 記錄用戶id

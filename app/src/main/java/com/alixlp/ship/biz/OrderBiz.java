@@ -1,7 +1,6 @@
 package com.alixlp.ship.biz;
 
 import com.alixlp.ship.bean.Order;
-import com.alixlp.ship.bean.OrderDetail;
 import com.alixlp.ship.config.Config;
 import com.alixlp.ship.net.CommonCallback;
 import com.alixlp.ship.util.SPUtils;
@@ -19,7 +18,7 @@ public class OrderBiz {
      * @param oid
      * @param commonCallback
      */
-    public void orderDetail(int oid, CommonCallback<OrderDetail> commonCallback) {
+    public void orderDetail(int oid, CommonCallback<Order> commonCallback) {
         String baseUrl = "http://" + SPUtils.getInstance().get(Config.APIURL, "") +
                 "/api.php";
         String token = (String) SPUtils.getInstance().get(Config.TOKEN, "");
@@ -56,7 +55,7 @@ public class OrderBiz {
     }
 
 
-    public void express(int oid, int kid, String code, CommonCallback<String> commonCallback) {
+    public void express(int oid, int kid, String code, CommonCallback<List> commonCallback) {
         String baseUrl = "http://" + SPUtils.getInstance().get(Config.APIURL, "") +
                 "/api.php";
         OkHttpUtils

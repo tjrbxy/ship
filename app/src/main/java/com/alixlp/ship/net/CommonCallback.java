@@ -42,13 +42,8 @@ public abstract class CommonCallback<T> extends StringCallback {
             int code = resp.getInt("code");
             String info = resp.getString("info");
             if (code == 200) {
-                if (info.equals("ok")) {
-                    String data = resp.getString("data");
-                    onSuccess((T) GsonUtil.getGson().fromJson(data, mType));
-                } else {
-                    onSuccess((T) info);
-                }
-
+                String data = resp.getString("data");
+                onSuccess((T) GsonUtil.getGson().fromJson(data, mType), info);
             } else {
                 onError(new RuntimeException(info));
             }
@@ -60,5 +55,5 @@ public abstract class CommonCallback<T> extends StringCallback {
 
     public abstract void onError(Exception e);
 
-    public abstract void onSuccess(T response);
+    public abstract void onSuccess(T response, String info);
 }

@@ -10,7 +10,6 @@ import android.media.AudioManager;
 import android.media.SoundPool;
 import android.os.Bundle;
 import android.os.Vibrator;
-import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -21,15 +20,14 @@ import android.widget.TextView;
 
 import com.alixlp.ship.R;
 import com.alixlp.ship.activity.BaseActivity;
-import com.alixlp.ship.adapter.BaseRecyclerAdapter;
-import com.alixlp.ship.bean.Goods;
 import com.alixlp.ship.bean.Order;
-import com.alixlp.ship.bean.OrderDetail;
 import com.alixlp.ship.biz.OrderBiz;
 import com.alixlp.ship.config.Config;
 import com.alixlp.ship.net.CommonCallback;
 import com.alixlp.ship.util.SPUtils;
 import com.alixlp.ship.util.T;
+
+import java.util.List;
 
 public class OrderDetailActivity extends BaseActivity {
 
@@ -99,15 +97,15 @@ public class OrderDetailActivity extends BaseActivity {
                 });*/
 
             } else if (1 == orderStatus || 2 == orderStatus) {
-                mOrderBiz.express(oid, mKuaiDiID, barcodeStr, new CommonCallback<String>() {
+                mOrderBiz.express(oid, mKuaiDiID, barcodeStr, new CommonCallback<List>() {
                     @Override
                     public void onError(Exception e) {
                         T.showToast(e.getMessage());
                     }
 
                     @Override
-                    public void onSuccess(String response) {
-                        T.showToast(response);
+                    public void onSuccess(List response, String info) {
+
                     }
                 });
 
@@ -176,14 +174,14 @@ public class OrderDetailActivity extends BaseActivity {
     @Override
     protected void onRequestData() {
         startLoadingProgress();
-        mOrderBiz.orderDetail(oid, new CommonCallback<OrderDetail>() {
+        mOrderBiz.orderDetail(oid, new CommonCallback<Order>() {
             @Override
             public void onError(Exception e) {
                 stopLoadingProgress();
             }
 
             @Override
-            public void onSuccess(OrderDetail response) {
+            public void onSuccess(Order response, String info) {
                 stopLoadingProgress();
                 mOrderId.setText(response.getOrderid());
                 mAddTime.setText(response.getAdd_time());
@@ -197,8 +195,6 @@ public class OrderDetailActivity extends BaseActivity {
                 }
                 Log.d(TAG, "onSuccess: " + goodsInfo);
                 mGoods.setText(goodsInfo);
-
-                // mBaseRecyclerAdapter.refresh(mGoods);
             }
         });
     }

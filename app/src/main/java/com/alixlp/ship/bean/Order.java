@@ -1,12 +1,33 @@
 package com.alixlp.ship.bean;
 
+import java.util.List;
+
 public class Order {
     private int id;
     private String orderid;
+    private int fahuo;
     private String name;
     private String tel;
     private String address;
-    private String goods;
+    private String add_time;
+
+    public String getAdd_time() {
+        return add_time;
+    }
+
+    public void setAdd_time(String add_time) {
+        this.add_time = add_time;
+    }
+
+    public List<Goods> getGoods() {
+        return goods;
+    }
+
+    public void setGoods(List<Goods> goods) {
+        this.goods = goods;
+    }
+
+    private List<Goods> goods;
     // private Goods goods;
 
     public int getId() {
@@ -49,23 +70,11 @@ public class Order {
         this.address = address;
     }
 
-    public String getGoods() {
-        return goods;
+    public int getFahuo() {
+        return fahuo;
     }
 
-    public void setGoods(String goods) {
-        this.goods = goods;
-    }
-
-    @Override
-    public String toString() {
-        return "Order{" +
-                "id=" + id +
-                ", orderid='" + orderid + '\'' +
-                ", name='" + name + '\'' +
-                ", tel='" + tel + '\'' +
-                ", address='" + address + '\'' +
-                ", goods='" + goods + '\'' +
-                '}';
+    public void setFahuo(int fahuo) {
+        this.fahuo = fahuo;
     }
 }
