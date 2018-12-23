@@ -1,5 +1,8 @@
 package com.alixlp.ship.biz;
 
+import android.util.Log;
+
+import com.alixlp.ship.bean.Goods;
 import com.alixlp.ship.bean.Order;
 import com.alixlp.ship.config.Config;
 import com.alixlp.ship.net.CommonCallback;
@@ -10,6 +13,7 @@ import java.util.List;
 
 public class OrderBiz {
 
+    private static final String TAG = "OrderBiz-app";
     private final String token = (String) SPUtils.getInstance().get(Config.TOKEN, "");
 
     /**
@@ -21,6 +25,7 @@ public class OrderBiz {
     public void orderDetail(int oid, CommonCallback<Order> commonCallback) {
         String baseUrl = "http://" + SPUtils.getInstance().get(Config.APIURL, "") +
                 "/api.php";
+        Log.d(TAG, "orderDetail: " + baseUrl);
         String token = (String) SPUtils.getInstance().get(Config.TOKEN, "");
         OkHttpUtils
                 .get()
@@ -76,7 +81,8 @@ public class OrderBiz {
      * @param code
      * @param commonCallback
      */
-    public void kd(int oid, String code, CommonCallback<Order> commonCallback) {
+    public void kd(int oid, String code, CommonCallback<List<Goods>> commonCallback) {
+        Log.d(TAG, "kd: oid=" + oid + " ,code = " + code);
         String baseUrl = "http://" + SPUtils.getInstance().get(Config.APIURL, "") +
                 "/api.php";
         OkHttpUtils

@@ -4,6 +4,9 @@ public class Goods {
     private int id;
     private int num;
     private int gid;
+
+
+    private int scan;
     private String title;
 
     public int getId() {
@@ -36,6 +39,14 @@ public class Goods {
 
     public void setTitle(String title) {
         this.title = title;
+    }
+
+    public int getScan() {
+        return scan;
+    }
+
+    public void setScan(int scan) {
+        this.scan = scan;
     }
 
     @Override

@@ -20,6 +20,7 @@ import android.widget.TextView;
 
 import com.alixlp.ship.R;
 import com.alixlp.ship.activity.BaseActivity;
+import com.alixlp.ship.bean.Goods;
 import com.alixlp.ship.bean.Order;
 import com.alixlp.ship.biz.OrderBiz;
 import com.alixlp.ship.config.Config;
@@ -72,31 +73,43 @@ public class OrderDetailActivity extends BaseActivity {
             byte temp = intent.getByteExtra(ScanManager.BARCODE_TYPE_TAG, (byte) 0);
             barcodeStr = new String(barcode, 0, barcodelen);
             Log.d(TAG, "barcodeStr: " + barcodeStr);
+            // 订单发货
             if (0 == orderStatus || 3 == orderStatus) {
-                // barcodeStr = "http://new.913fang.com/index/fw?f=392343496700";
+                // barcodeStr = "http://new.913fang.com/index/fw?f=119015103100";
+                // barcodeStr = "http://new.913fang.com/index/fw?f=119015177300"
+                String code = "";
                 if (barcodeStr.indexOf("?f=") != -1) {
                     Log.d(TAG, "onReceive: 包含");
+                    code = barcodeStr.split("=")[1];
                 } else {
                     Log.d(TAG, "onReceive: 不包含");
+                    code = barcodeStr;
                 }
-
-
-                Log.d(TAG, "onReceive: " + barcodeStr);
-                return;
+                Log.d(TAG, "onReceive: " + code);
                 // 待发货  已推迟
-/*                mOrderBiz.kd(oid, barcodeStr, new CommonCallback<Order>() {
+                mOrderBiz.kd(oid, code, new CommonCallback<List<Goods>>() {
                     @Override
                     public void onError(Exception e) {
+                        Log.d(TAG, "onError: " + e);
                         T.showToast(e.getMessage());
                     }
 
                     @Override
-                    public void onSuccess(Order response) {
-                        Log.d(TAG, "onSuccess: " + response);
+                    public void onSuccess(List<Goods> response, String info) {
+                        String scanInfo = "";
+                        if (!info.equals("ok")) {
+                            T.showToast(info);
+                        }
+                        for (int index = 0; index < response.size(); index++) {
+                            scanInfo += response.get(index).getTitle() + ": " + response.get(index).getScan() + "\n";
+                        }
+                        // 赋值到扫描结果区域
+                        mScanGoods.setText(scanInfo);
                     }
-                });*/
+                });
 
             } else if (1 == orderStatus || 2 == orderStatus) {
+                // 扫入快递单号
                 mOrderBiz.express(oid, mKuaiDiID, barcodeStr, new CommonCallback<List>() {
                     @Override
                     public void onError(Exception e) {
@@ -105,14 +118,14 @@ public class OrderDetailActivity extends BaseActivity {
 
                     @Override
                     public void onSuccess(List response, String info) {
-
+                        T.showToast(info);
                     }
                 });
+                // 赋值到扫描结果区域
+                mScanGoods.setText(barcodeStr);
 
             }
-            Log.d(TAG, "onReceive: " + orderStatus);
 
-            mScanGoods.setText(barcodeStr);
 
         }
 

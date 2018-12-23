@@ -211,7 +211,8 @@ public class ViewPagerOrderFragment extends Fragment implements OnRefreshListene
             mRecyclerView.addItemDecoration(new DividerItemDecoration(getContext(),
                     DividerItemDecoration.VERTICAL));
             // 加载数据
-            if (this.currentItem == 0) loadData(this.currentItem);
+            // if (this.currentItem == 0)
+            loadData(this.currentItem);
             mAdapter = new BaseRecyclerAdapter<Order>(mDatas, R.layout.item_order_list, this) {
                 @Override
                 protected void onBindViewHolder(SmartViewHolder holder, Order model, int position) {
