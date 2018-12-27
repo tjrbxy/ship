@@ -59,6 +59,31 @@ public class OrderBiz {
                 .execute(commonCallback);
     }
 
+    /**
+     * 搜索
+     *
+     * @param currPage
+     * @param orderStatus
+     * @param commonCallback
+     */
+    public void listByPage(int currPage, int orderStatus, int mType, String text,
+                           CommonCallback<List<Order>>
+                                   commonCallback) {
+        String baseUrl = "http://" + SPUtils.getInstance().get(Config.APIURL, "") +
+                "/api.php";
+        OkHttpUtils
+                .get()
+                .url(baseUrl + "/order")
+                .tag(this)
+                .addParams("currPage", currPage + "")
+                .addParams("type", mType + "")
+                .addParams("keywords", text)
+                .addParams("orderStatus", orderStatus + "")
+                .addParams("token", token)
+                .build()
+                .execute(commonCallback);
+    }
+
 
     public void express(int oid, int kid, String code, CommonCallback<List> commonCallback) {
         String baseUrl = "http://" + SPUtils.getInstance().get(Config.APIURL, "") +

@@ -20,6 +20,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.EditText;
+import android.widget.ImageButton;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 
 import com.alixlp.ship.R;
 import com.alixlp.ship.activity.order.OrderDetailActivity;
@@ -39,6 +43,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static com.alixlp.ship.R.id.refreshLayout;
+import static com.alixlp.ship.R.id.search_txt;
 
 /**
  * 使用示例-ViewPager页面
@@ -48,8 +53,6 @@ public class ViewPagerOrderFragment extends Fragment implements OnRefreshListene
         OnRefreshLoadMoreListener {
 
     private static final String TAG = "ViewPagerOrderFragment-app";
-
-    private static OrderBiz mOrderBiz = new OrderBiz();
 
     public enum Item {
         NestedShipped("待发货", SmartFragment.class),
@@ -65,10 +68,17 @@ public class ViewPagerOrderFragment extends Fragment implements OnRefreshListene
         }
     }
 
+    private static OrderBiz mOrderBiz = new OrderBiz();
     private TabLayout mTabLayout;
     private ViewPager mViewPager;
     private RefreshLayout mRefreshLayout;
     private ViewPagerAdapter mViewPagerAdapter;
+    // 搜索
+    private RadioGroup mRadioGroup; // 单选按钮
+    private int mType = 1; // 时间范围类型 1近30天，2 全部时间
+    private EditText mEditText; // 搜索框
+    private ImageButton mImageButton; // 搜索 按钮
+
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle
@@ -116,6 +126,37 @@ public class ViewPagerOrderFragment extends Fragment implements OnRefreshListene
             }
         });
         mTabLayout.setupWithViewPager(mViewPager, true);
+
+        mRadioGroup = (RadioGroup) root.findViewById(R.id.RadioGroup);
+        mEditText = (EditText) root.findViewById(R.id.search_txt);
+        mImageButton = root.findViewById(R.id.searchBt);
+
+        // 时间范围切换
+        mRadioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                if (checkedId == R.id.RadioButton1) {
+                    mType = 1;
+                } else {
+                    mType = 2;
+                }
+            }
+        });
+        // 搜索
+        mImageButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String text = mEditText.getText().toString();
+                if (text.equals("")) {
+                    T.showToast("请输入搜索条件");
+                }
+                mViewPagerAdapter.fragments[mViewPager.getCurrentItem()]
+                        .searchRefresh(mRefreshLayout, mType, text);
+
+            }
+        });
+
+
     }
 
 
@@ -128,7 +169,6 @@ public class ViewPagerOrderFragment extends Fragment implements OnRefreshListene
     // 下拉刷新代码
     @Override
     public void onRefresh(RefreshLayout refreshLayout) {
-        // mViewPager.getCurrentItem() 对应的头部id
         mViewPagerAdapter.fragments[mViewPager.getCurrentItem()]
                 .onRefresh(refreshLayout, mViewPager.getCurrentItem());
 
@@ -323,6 +363,36 @@ public class ViewPagerOrderFragment extends Fragment implements OnRefreshListene
                     refreshLayout.finishLoadMore();
                 }
             });
+        }
+
+
+        /**
+         * 搜索
+         *
+         * @param refreshLayout
+         * @param mType
+         * @param text
+         */
+        public void searchRefresh(final RefreshLayout refreshLayout, int mType, String text) {
+            mOrderBiz.listByPage(1, this.currentItem, mType, text, new
+                    CommonCallback<List<Order>>() {
+                        @Override
+                        public void onError(Exception e) {
+                            T.showToast(e.getMessage());
+                        }
+
+                        @Override
+                        public void onSuccess(List<Order> response, String info) {
+                            if (response.size() == 0) {
+                                T.showToast("木有订单了。");
+                            }
+                            mDatas.clear();
+                            mDatas.addAll(response);
+                            mAdapter.refresh(mDatas);
+                            refreshLayout.finishRefresh();
+                            refreshLayout.setNoMoreData(false);
+                        }
+                    });
         }
     }
 }
