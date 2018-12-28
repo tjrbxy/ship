@@ -3,17 +3,16 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    tools:context="com.alixlp.ship.fragment.using.PureScrollUsingFragment">
+    android:orientation="vertical">
 
     <com.wang.avi.AVLoadingIndicatorView
-        style="@style/AVLoadingIndicatorView.Large"
         android:id="@+id/avi"
+        style="@style/AVLoadingIndicatorView.Large"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:visibility="visible"
-        app:indicatorName="BallTrianglePathIndicator"
-        app:indicatorColor="@color/colorPrimary" />
+        app:indicatorColor="@color/colorPrimary"
+        app:indicatorName="BallTrianglePathIndicator" />
 
 </FrameLayout>
