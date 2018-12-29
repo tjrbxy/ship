@@ -45,7 +45,6 @@
         <activity android:name="com.alixlp.ship.activity.order.OrderActivity" />
         <activity android:name="com.alixlp.ship.activity.LoginActivity" />
         <activity android:name="com.alixlp.ship.activity.setting.SettingActivity" />
-        <activity android:name="com.alixlp.ship.activity.ScanActivity" />
         <activity android:name="com.alixlp.ship.activity.order.OrderDetailActivity" />
     </application>
 
