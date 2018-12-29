@@ -290,7 +290,7 @@ public class ViewPagerOrderFragment extends Fragment implements OnRefreshListene
                 @Override
                 public void onSuccess(List<Order> response, String info) {
                     if (response.size() == 0) {
-                        T.showToast("木有订单了。");
+                        T.showToast("无结果");
                         return;
                     }
                     mDatas.clear();
@@ -316,7 +316,7 @@ public class ViewPagerOrderFragment extends Fragment implements OnRefreshListene
                 @Override
                 public void onSuccess(List<Order> response, String info) {
                     if (response.size() == 0) {
-                        T.showToast("木有订单了。");
+                        T.showToast("无结果");
                     }
                     mDatas.clear();
                     mDatas.addAll(response);
@@ -373,7 +373,7 @@ public class ViewPagerOrderFragment extends Fragment implements OnRefreshListene
                         @Override
                         public void onSuccess(List<Order> response, String info) {
                             if (response.size() == 0) {
-                                T.showToast("木有订单了。");
+                                T.showToast("无结果");
                             }
                             mDatas.clear();
                             mDatas.addAll(response);

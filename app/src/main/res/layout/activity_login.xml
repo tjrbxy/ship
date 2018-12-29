@@ -14,7 +14,6 @@
         android:ems="10"
         android:hint="@string/hint_login_username"
         android:inputType="textPersonName"
-        android:text="wangwei"
         android:textSize="14sp" />
 
     <EditText
@@ -27,7 +26,6 @@
         android:ems="10"
         android:hint="@string/hint_login_passwd"
         android:inputType="textPassword"
-        android:text="112233"
         android:textSize="14sp" />
 
     <Button

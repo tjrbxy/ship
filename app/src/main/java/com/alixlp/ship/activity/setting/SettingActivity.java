@@ -47,7 +47,7 @@ public class SettingActivity extends BaseActivity {
         // 设置默认
         Boolean language = (Boolean) SPUtils.getInstance().get(Config.LANGUAGE, true);
         mLanguage.setChecked(language);
-        String apiUrl = (String) SPUtils.getInstance().get(Config.APIURL, "ay.alixlp.com");
+        String apiUrl = (String) SPUtils.getInstance().get(Config.APIURL, "");
         mEtApiUrl.setText(apiUrl);
         // 事件区域
         mBtSetting.setOnClickListener(new View.OnClickListener() {

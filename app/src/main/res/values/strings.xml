@@ -116,7 +116,7 @@
     <string name="button_login">登陆</string>
     <string name="hint_login_passwd">请输入您的密码</string>
     <string name="hint_login_username">请输入您的用户名</string>
-    <string name="copyright">©masaic.net</string>
+    <string name="app_copyright">©masaic.net</string>
     <string name="bt_site_string">保存</string>
     <string name="title_activity_index_main">扫码发货</string>
     <string name="title_order_list">订单列表</string>
@@ -132,4 +132,12 @@
     <string name="title_setting">设置</string>
     <string name="fragment_order_viewpager">订单列表</string>
     <string name="bt_logout">安全退出</string>
+    <string name="tips_order_sn">订单编号：</string>
+    <string name="tips_order_add_time">下单时间：</string>
+    <string name="tips_order_address">配送地址：</string>
+    <string name="tips_order_scan_info">扫入信息：</string>
+    <string name="tips_order_goods">商品信息：</string>
+    <string name="tips_setting_api_url">数据库链接网址：</string>
+    <string name="tips_setting_language">使用粤语提示：</string>
+    <string name="tips_setting_text">温馨提示\n软硬件业务及报修\n电话：15905791993</string>
 </resources>

@@ -15,7 +15,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="2dp"
-            android:text="数据库链接网址：" />
+            android:text="@string/tips_setting_api_url" />
 
         <EditText
             android:id="@+id/id_et_api_url"
@@ -43,7 +43,7 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:gravity="center_vertical"
-            android:text="使用粤语提示："
+            android:text="@string/tips_setting_language"
             tools:ignore="Suspicious0dp" />
 
         <com.suke.widget.SwitchButton
@@ -70,7 +70,7 @@
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:gravity="center"
-        android:text="温馨提示\n本PDA设备故障报修\n电话：15905791993"
+        android:text="@string/tips_setting_text"
         android:textColor="#AEAEAE"
         android:textSize="16sp" />
 
@@ -78,6 +78,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:text="@string/copyright"
+        android:text="@string/app_copyright"
         android:textColor="#AEAEAE" />
 </LinearLayout>
