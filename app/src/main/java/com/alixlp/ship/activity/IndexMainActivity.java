@@ -13,6 +13,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.MenuItem;
+import android.view.Window;
+import android.view.WindowManager;
 
 import com.alixlp.ship.R;
 import com.alixlp.ship.activity.setting.SettingActivity;
@@ -29,6 +31,8 @@ import com.alixlp.ship.util.T;
  */
 public class IndexMainActivity extends AppCompatActivity implements
         OnNavigationItemSelectedListener {
+    protected boolean isHideAppTitle = true;
+    protected boolean isHideSysTitle = true;
     private static final String TAG = "IndexMainActivity-app";
 
     private enum TabFragment {
@@ -75,7 +79,17 @@ public class IndexMainActivity extends AppCompatActivity implements
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        // 隐藏标题
+        if (this.isHideAppTitle) {
+            this.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        }
         super.onCreate(savedInstanceState);
+        // 全屏显示
+        // 全屏
+        if (this.isHideSysTitle) {
+            this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+                    WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        }
         // 判断网络是否可用
         if (!NetWorkUtils.networkAvailable(this)) {
             T.showToast("网络不可用");

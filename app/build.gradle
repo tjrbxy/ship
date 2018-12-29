@@ -6,7 +6,7 @@ android {
     buildToolsVersion '25.0.2'
 
     defaultConfig {
-        applicationId "com.alixlp.ship.app"
+        applicationId "com.alixlp.ship"
         minSdkVersion 15
         targetSdkVersion 28
         versionCode 1

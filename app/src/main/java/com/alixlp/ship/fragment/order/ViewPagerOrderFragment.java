@@ -14,7 +14,6 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,7 +21,6 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.RadioButton;
 import android.widget.RadioGroup;
 
 import com.alixlp.ship.R;
@@ -43,7 +41,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static com.alixlp.ship.R.id.refreshLayout;
-import static com.alixlp.ship.R.id.search_txt;
 
 /**
  * 使用示例-ViewPager页面
@@ -89,14 +86,6 @@ public class ViewPagerOrderFragment extends Fragment implements OnRefreshListene
     @Override
     public void onViewCreated(@NonNull View root, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(root, savedInstanceState);
-
-        final Toolbar toolbar = (Toolbar) root.findViewById(R.id.toolbar);
-        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                getActivity().finish();
-            }
-        });
 
         mRefreshLayout = (RefreshLayout) root.findViewById(refreshLayout);
         mRefreshLayout.setOnRefreshLoadMoreListener(this); // 刷新和加载监听器
