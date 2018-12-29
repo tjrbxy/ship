@@ -75,7 +75,8 @@ public class SettingActivity extends BaseActivity {
                 } else {
                     T.showToast("开启普通话提示");
                 }
-                SPUtils.getInstance().put(Config.LANGUAGE, isChecked + "");
+                Log.d(TAG, "onCheckedChanged: " + isChecked);
+                SPUtils.getInstance().put(Config.LANGUAGE, isChecked);
             }
         });
         // 退出

@@ -38,9 +38,10 @@ public class OrderDetailActivity extends BaseActivity {
     private Vibrator mVibrator;
     private ScanManager mScanManager;
     private SoundPool soundpool = null;
-    private int soundid;
     private String barcodeStr;
     private boolean isScaning = false;
+    // 扫码声音
+    private int soundid, sendSuccessSoundid, inputSuccessSoundid, boxCodeRepeatSoundid, repeatedSweepCodeSoundid;
 
     private static final String TAG = "OrderDetailActivity-app";
     private OrderBiz mOrderBiz = new OrderBiz();
@@ -75,15 +76,11 @@ public class OrderDetailActivity extends BaseActivity {
             Log.d(TAG, "barcodeStr: " + barcodeStr);
             // 订单发货
             if (0 == orderStatus || 3 == orderStatus) {
-                // barcodeStr = "http://new.913fang.com/index/fw?f=119015103100";
-                // barcodeStr = "http://new.913fang.com/index/fw?f=119015177300"
                 String code = "";
                 if (barcodeStr.indexOf("?f=") != -1) {
-                    Log.d(TAG, "onReceive: 包含");
-                    code = barcodeStr.split("=")[1];
+                    code = barcodeStr.split("=")[1]; // 包含
                 } else {
-                    Log.d(TAG, "onReceive: 不包含");
-                    code = barcodeStr;
+                    code = barcodeStr; //不包含
                 }
                 Log.d(TAG, "onReceive: " + code);
                 // 待发货  已推迟
@@ -98,7 +95,20 @@ public class OrderDetailActivity extends BaseActivity {
                     public void onSuccess(List<Goods> response, String info) {
                         String scanInfo = "";
                         if (!info.equals("ok")) {
-                            T.showToast(info);
+                            if (info.indexOf("-") != -1) {
+                                String code = info.split("-")[1];
+                                if (code.equals("101")) {
+                                    // 重复扫码
+                                    soundpool.play(repeatedSweepCodeSoundid, 1, 1, 1, 1, 1);
+                                } else if (code.equals("102")) {
+                                    // 发货完成
+                                    soundpool.play(sendSuccessSoundid, 1, 1, 1, 1, 1);
+                                }
+                                Log.d(TAG, "onSuccess: " + info);
+                                T.showToast(info.split("-")[0]);
+                            } else {
+                                T.showToast(info);
+                            }
                         }
                         for (int index = 0; index < response.size(); index++) {
                             scanInfo += response.get(index).getTitle() + ": " + response.get(index).getScan() + "\n";
@@ -118,6 +128,8 @@ public class OrderDetailActivity extends BaseActivity {
 
                     @Override
                     public void onSuccess(List response, String info) {
+                        // 录入单号成功
+                        soundpool.play(inputSuccessSoundid, 1, 1, 0, 0, 1);
                         T.showToast(info);
                     }
                 });
@@ -203,10 +215,9 @@ public class OrderDetailActivity extends BaseActivity {
                 mAddress.setText(response.getAddress());
                 String goodsInfo = "";
                 for (int index = 0; index < response.getGoods().size(); index++) {
-                    goodsInfo += "名称：" + response.getGoods().get(index).getTitle() + "， 数量：" +
+                    goodsInfo += response.getGoods().get(index).getTitle() + " : " + response.getGoods().get(index).getRemark() + "， 数量：" +
                             response.getGoods().get(index).getNum() + "\n";
                 }
-                Log.d(TAG, "onSuccess: " + goodsInfo);
                 mGoods.setText(goodsInfo);
             }
         });
@@ -230,6 +241,20 @@ public class OrderDetailActivity extends BaseActivity {
         mScanManager.switchOutputMode(0);
         soundpool = new SoundPool(1, AudioManager.STREAM_NOTIFICATION, 100); // MODE_RINGTONE
         soundid = soundpool.load("/etc/Scan_new.ogg", 1);
+        // 判断当前语言种类
+        if ((Boolean) SPUtils.getInstance().get(Config.LANGUAGE, false)) {
+            // 粤语
+            sendSuccessSoundid = soundpool.load(this, R.raw.ctsendsuccesssoundid, 1); // 发货成功
+            boxCodeRepeatSoundid = soundpool.load(this, R.raw.ctboxcoderepeatsoundid, 1); //外箱码重复
+            inputSuccessSoundid = soundpool.load(this, R.raw.ctinputsuccesssoundid, 1); //录入成功
+            repeatedSweepCodeSoundid = soundpool.load(this, R.raw.ctrepeatedsweepcodesoundid, 1); // 请勿重复扫码
+        } else {
+            // 普通话
+            sendSuccessSoundid = soundpool.load(this, R.raw.sendsuccesssoundid, 1); // 发货成功
+            boxCodeRepeatSoundid = soundpool.load(this, R.raw.boxcoderepeatsoundid, 1); //外箱码重复
+            inputSuccessSoundid = soundpool.load(this, R.raw.inputsuccesssoundid, 1); //录入成功
+            repeatedSweepCodeSoundid = soundpool.load(this, R.raw.repeatedsweepcodesoundid, 1); // 请勿重复扫码
+        }
         mScanGoods.setText("");
         IntentFilter filter = new IntentFilter();
         int[] idbuf = new int[]{PropertyID.WEDGE_INTENT_ACTION_NAME, PropertyID

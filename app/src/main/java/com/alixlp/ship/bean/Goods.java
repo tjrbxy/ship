@@ -9,6 +9,16 @@ public class Goods {
     private int scan;
     private String title;
 
+    public String getRemark() {
+        return remark;
+    }
+
+    public void setRemark(String remark) {
+        this.remark = remark;
+    }
+
+    private String remark;
+
     public int getId() {
         return id;
     }
