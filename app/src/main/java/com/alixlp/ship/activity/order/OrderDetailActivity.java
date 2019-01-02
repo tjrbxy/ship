@@ -41,7 +41,8 @@ public class OrderDetailActivity extends BaseActivity {
     private String barcodeStr;
     private boolean isScaning = false;
     // 扫码声音
-    private int soundid, sendSuccessSoundid, inputSuccessSoundid, boxCodeRepeatSoundid, repeatedSweepCodeSoundid;
+    private int soundid, sendSuccessSoundid, inputSuccessSoundid, boxCodeRepeatSoundid,
+            repeatedSweepCodeSoundid, scanOtherGoodsSoundid;
 
     private static final String TAG = "OrderDetailActivity-app";
     private OrderBiz mOrderBiz = new OrderBiz();
@@ -103,6 +104,9 @@ public class OrderDetailActivity extends BaseActivity {
                                 } else if (code.equals("102")) {
                                     // 发货完成
                                     soundpool.play(sendSuccessSoundid, 1, 1, 1, 1, 1);
+                                } else if (code.equals("103")) {
+                                    // 扫入其他产品
+                                    soundpool.play(scanOtherGoodsSoundid, 1, 1, 1, 1, 1);
                                 }
                                 Log.d(TAG, "onSuccess: " + info);
                                 T.showToast(info.split("-")[0]);
@@ -111,7 +115,8 @@ public class OrderDetailActivity extends BaseActivity {
                             }
                         }
                         for (int index = 0; index < response.size(); index++) {
-                            scanInfo += response.get(index).getTitle() + ": " + response.get(index).getScan() + "\n";
+                            scanInfo += response.get(index).getTitle() + ": " + response.get
+                                    (index).getScan() + "\n";
                         }
                         // 赋值到扫描结果区域
                         mScanGoods.setText(scanInfo);
@@ -215,7 +220,8 @@ public class OrderDetailActivity extends BaseActivity {
                 mAddress.setText(response.getAddress());
                 String goodsInfo = "";
                 for (int index = 0; index < response.getGoods().size(); index++) {
-                    goodsInfo += response.getGoods().get(index).getTitle() + " : " + response.getGoods().get(index).getRemark() + "， 数量：" +
+                    goodsInfo += response.getGoods().get(index).getTitle() + " : " + response
+                            .getGoods().get(index).getRemark() + "， 数量：" +
                             response.getGoods().get(index).getNum() + "\n";
                 }
                 mGoods.setText(goodsInfo);
@@ -247,13 +253,19 @@ public class OrderDetailActivity extends BaseActivity {
             sendSuccessSoundid = soundpool.load(this, R.raw.ctsendsuccesssoundid, 1); // 发货成功
             boxCodeRepeatSoundid = soundpool.load(this, R.raw.ctboxcoderepeatsoundid, 1); //外箱码重复
             inputSuccessSoundid = soundpool.load(this, R.raw.ctinputsuccesssoundid, 1); //录入成功
-            repeatedSweepCodeSoundid = soundpool.load(this, R.raw.ctrepeatedsweepcodesoundid, 1); // 请勿重复扫码
+            repeatedSweepCodeSoundid = soundpool.load(this, R.raw.ctrepeatedsweepcodesoundid, 1);
+            // 请勿重复扫码
+            scanOtherGoodsSoundid = soundpool.load(this, R.raw.ctscanothergoodssoundid, 1); //
+            // 扫入其他产品
         } else {
             // 普通话
             sendSuccessSoundid = soundpool.load(this, R.raw.sendsuccesssoundid, 1); // 发货成功
             boxCodeRepeatSoundid = soundpool.load(this, R.raw.boxcoderepeatsoundid, 1); //外箱码重复
             inputSuccessSoundid = soundpool.load(this, R.raw.inputsuccesssoundid, 1); //录入成功
-            repeatedSweepCodeSoundid = soundpool.load(this, R.raw.repeatedsweepcodesoundid, 1); // 请勿重复扫码
+            repeatedSweepCodeSoundid = soundpool.load(this, R.raw.repeatedsweepcodesoundid, 1);
+            // 请勿重复扫码
+            scanOtherGoodsSoundid = soundpool.load(this, R.raw.scanothergoodssoundid, 1); //
+            // 扫入其他产品
         }
         mScanGoods.setText("");
         IntentFilter filter = new IntentFilter();

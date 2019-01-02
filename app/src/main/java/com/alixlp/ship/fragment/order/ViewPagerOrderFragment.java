@@ -265,6 +265,7 @@ public class ViewPagerOrderFragment extends Fragment implements OnRefreshListene
         }
 
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            Log.d(TAG, "onItemClick: " + mDatas + "," + position);
             Intent intent = new Intent(getActivity(), OrderDetailActivity.class);
             Bundle bundle = new Bundle();
             bundle.putInt("OID", mDatas.get(position).getId());
@@ -315,14 +316,15 @@ public class ViewPagerOrderFragment extends Fragment implements OnRefreshListene
 
                 @Override
                 public void onSuccess(List<Order> response, String info) {
+                    mDatas.clear();
                     if (response.size() == 0) {
                         T.showToast("无结果");
+                    } else {
+                        mDatas.addAll(response);
+                        mAdapter.refresh(mDatas);
+                        refreshLayout.finishRefresh();
+                        refreshLayout.setNoMoreData(false);
                     }
-                    mDatas.clear();
-                    mDatas.addAll(response);
-                    mAdapter.refresh(mDatas);
-                    refreshLayout.finishRefresh();
-                    refreshLayout.setNoMoreData(false);
                 }
             });
         }
@@ -345,11 +347,11 @@ public class ViewPagerOrderFragment extends Fragment implements OnRefreshListene
                     if (response.size() == 0) {
                         T.showToast("数据全部加载完毕");
                         refreshLayout.finishLoadMoreWithNoMoreData();//将不会再次触发加载更多事件
+                    } else {
+                        mDatas.addAll(response);
+                        mAdapter.loadMore(mDatas);
+                        refreshLayout.finishLoadMore();
                     }
-                    mDatas.clear();
-                    mDatas.addAll(response);
-                    mAdapter.loadMore(mDatas);
-                    refreshLayout.finishLoadMore();
                 }
             });
         }
