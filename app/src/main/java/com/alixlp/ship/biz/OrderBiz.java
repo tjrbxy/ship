@@ -119,4 +119,25 @@ public class OrderBiz {
                 .build()
                 .execute(commonCallback);
     }
+
+
+    /**
+     * 查询扫入的产品信息
+     *
+     * @param oid
+     * @param commonCallback
+     */
+    public void scanGoods(int oid, CommonCallback commonCallback) {
+        String baseUrl = "http://" + SPUtils.getInstance().get(Config.APIURL, "") +
+                "/api.php";
+        Log.d(TAG, "scanGoods: " + baseUrl + "/order/scanGoods");
+        OkHttpUtils
+                .post()
+                .url(baseUrl + "/order/scanGoods")
+                .addParams("oid", oid + "")
+                .addParams("token", token)
+                .build()
+                .execute(commonCallback);
+
+    }
 }

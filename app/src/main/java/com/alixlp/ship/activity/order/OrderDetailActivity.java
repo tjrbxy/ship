@@ -98,18 +98,21 @@ public class OrderDetailActivity extends BaseActivity {
                         if (!info.equals("ok")) {
                             if (info.indexOf("-") != -1) {
                                 String code = info.split("-")[1];
+                                T.showToast(info.split("-")[0]);
                                 if (code.equals("101")) {
                                     // 重复扫码
                                     soundpool.play(repeatedSweepCodeSoundid, 1, 1, 1, 1, 1);
                                 } else if (code.equals("102")) {
                                     // 发货完成
                                     soundpool.play(sendSuccessSoundid, 1, 1, 1, 1, 1);
+                                    finish();
                                 } else if (code.equals("103")) {
                                     // 扫入其他产品
                                     soundpool.play(scanOtherGoodsSoundid, 1, 1, 1, 1, 1);
                                 }
                                 Log.d(TAG, "onSuccess: " + info);
-                                T.showToast(info.split("-")[0]);
+
+
                             } else {
                                 T.showToast(info);
                             }
@@ -136,6 +139,8 @@ public class OrderDetailActivity extends BaseActivity {
                         // 录入单号成功
                         soundpool.play(inputSuccessSoundid, 1, 1, 0, 0, 1);
                         T.showToast(info);
+                        finish();
+
                     }
                 });
                 // 赋值到扫描结果区域
@@ -227,6 +232,28 @@ public class OrderDetailActivity extends BaseActivity {
                 mGoods.setText(goodsInfo);
             }
         });
+
+        // 查询扫入的产品信息
+        if (orderStatus == 0 || orderStatus == 3) {
+            mOrderBiz.scanGoods(oid, new CommonCallback<List<Goods>>() {
+                @Override
+                public void onError(Exception e) {
+                    Log.d(TAG, "onError: " + e.getMessage());
+                    T.showToast(e.getMessage());
+                }
+
+                @Override
+                public void onSuccess(List<Goods> response, String info) {
+                    String scanInfo = "";
+                    for (int index = 0; index < response.size(); index++) {
+                        scanInfo += response.get(index).getTitle() + ": " + response.get
+                                (index).getScan() + "\n";
+                    }
+                    // 赋值到扫描结果区域
+                    mScanGoods.setText(scanInfo);
+                }
+            });
+        }
     }
 
     @Override
