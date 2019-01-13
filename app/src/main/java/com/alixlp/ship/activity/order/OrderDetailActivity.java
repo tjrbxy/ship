@@ -101,14 +101,14 @@ public class OrderDetailActivity extends BaseActivity {
                                 T.showToast(info.split("-")[0]);
                                 if (code.equals("101")) {
                                     // 重复扫码
-                                    soundpool.play(repeatedSweepCodeSoundid, 1, 1, 1, 1, 1);
+                                    soundpool.play(repeatedSweepCodeSoundid, 1, 1, 0, 0, 1);
                                 } else if (code.equals("102")) {
                                     // 发货完成
-                                    soundpool.play(sendSuccessSoundid, 1, 1, 1, 1, 1);
+                                    soundpool.play(sendSuccessSoundid, 1, 1, 0, 0, 1);
                                     finish();
                                 } else if (code.equals("103")) {
                                     // 扫入其他产品
-                                    soundpool.play(scanOtherGoodsSoundid, 1, 1, 1, 1, 1);
+                                    soundpool.play(scanOtherGoodsSoundid, 1, 1, 0, 0, 1);
                                 }
                                 Log.d(TAG, "onSuccess: " + info);
 

@@ -100,15 +100,16 @@ public class ActiveOrderFragment extends Fragment {
                         if (info.indexOf("-") != -1) {
                             String code = info.split("-")[1];
                             T.showToast(info.split("-")[0]);
-            /*                if (code.equals("101")) {
+                            if (code.equals("101")) {
                                 // 重复扫码
-                                soundpool.play(repeatedSweepCodeSoundid, 1, 1, 1, 1, 1);
-                            }*/
+                                soundpool.play(repeatedSweepCodeSoundid, 1, 1, 0, 0, 1);
+                            }
                             Log.d(TAG, "onSuccess: " + info);
                         } else {
                             T.showToast(info);
                         }
                     } else {
+                        // soundpool.play(scanOtherGoodsSoundid, 1, 1, 1, 1, 1); // 产品已扫足
                         SPUtils.getInstance().put("active", ActivieScan + "," + barcodeStr);
                     }
                     String scanInfo = "";
@@ -182,11 +183,12 @@ public class ActiveOrderFragment extends Fragment {
                     @Override
                     public void onSuccess(Agent response, String info) {
                         // 代理信息
-                        mAgentName.setText("姓名：" + response.getName() + " ，电话：" + response.getTel() + "\n");
+                        mAgentName.setText("姓名：" + response.getName() + " ，微信号：" + response.getWeixin() + "\n");
                         // 收货人信息
                         mConsigneeName.setText(response.getAddress());
                         mScanGoods.setText("");
                         SPUtils.getInstance().put("mUid", mUid);
+                        mUserId.setFocusable(false);
                     }
                 });
             }
@@ -220,6 +222,8 @@ public class ActiveOrderFragment extends Fragment {
                         mAgentName.setText("");
                         mConsigneeName.setText("");
                         mUserId.setText("");
+                        soundpool.play(sendSuccessSoundid, 1, 1, 0, 0, 1);// 发货成功
+                        mUserId.requestFocus(); // 重新聚焦
                     }
                 });
             }

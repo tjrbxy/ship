@@ -142,7 +142,7 @@
     <string name="tips_setting_api_url">数据库链接网址：</string>
     <string name="tips_setting_language">使用粤语提示：</string>
     <string name="tips_setting_text">温馨提示\n软硬件业务及报修\n电话：15905791993</string>
-    <string name="tips_consignee_id">收获人ID：</string>
+    <string name="tips_consignee_id">收货人ID：</string>
     <string name="bt_send">确认无误发货</string>
     <string name="tips_consignee_name">收货人姓名：</string>
 

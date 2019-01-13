@@ -4,6 +4,7 @@ public class Agent {
     private int id;
     private String name;
     private String tel;
+    private String weixin;
     private String address;
 
     public Agent() {
@@ -39,6 +40,14 @@ public class Agent {
 
     public void setAddress(String address) {
         this.address = address;
+    }
+
+    public String getWeixin() {
+        return weixin;
+    }
+
+    public void setWeixin(String weixin) {
+        this.weixin = weixin;
     }
 
     @Override

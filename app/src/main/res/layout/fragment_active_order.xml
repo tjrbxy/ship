@@ -68,7 +68,7 @@
         android:background="#F1EFF2"
         android:paddingTop="@dimen/dp_4"
         android:paddingBottom="@dimen/dp_4"
-        android:text="收货人信息：" />
+        android:text="收货信息：" />
 
     <TextView
         android:id="@+id/id_tv_consignee_name"
