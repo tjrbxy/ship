@@ -38,7 +38,9 @@ import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
 import com.scwang.smartrefresh.layout.listener.OnRefreshLoadMoreListener;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static com.alixlp.ship.R.id.refreshLayout;
 
@@ -152,12 +154,14 @@ public class ViewPagerOrderFragment extends Fragment implements OnRefreshListene
     @Override
     public void onResume() {
         super.onResume();
-        mRefreshLayout.autoRefresh(); // 自动刷新
+/*        if( mRefreshLayout != null)
+            mRefreshLayout.autoRefresh(); // 自动刷新*/
     }
 
     // 下拉刷新代码
     @Override
     public void onRefresh(RefreshLayout refreshLayout) {
+
         mViewPagerAdapter.fragments[mViewPager.getCurrentItem()]
                 .onRefresh(refreshLayout, mViewPager.getCurrentItem());
 
@@ -232,7 +236,7 @@ public class ViewPagerOrderFragment extends Fragment implements OnRefreshListene
 
         @Override
         public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-            Log.d(TAG, "onViewCreated: " + this.currentItem);
+
             super.onViewCreated(view, savedInstanceState);
             mRecyclerView = (RecyclerView) view;
             mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
@@ -265,7 +269,7 @@ public class ViewPagerOrderFragment extends Fragment implements OnRefreshListene
         }
 
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-            Log.d(TAG, "onItemClick: " + mDatas + "," + position);
+
             Intent intent = new Intent(getActivity(), OrderDetailActivity.class);
             Bundle bundle = new Bundle();
             bundle.putInt("OID", mDatas.get(position).getId());
@@ -282,7 +286,10 @@ public class ViewPagerOrderFragment extends Fragment implements OnRefreshListene
          */
         private List<Order> loadData(int currentItem) {
 
-            mOrderBiz.listByPage(1, currentItem, new CommonCallback<List<Order>>() {
+            Map parms = new HashMap();
+            parms.put("currPage", 1 + "");
+            parms.put("orderStatus", currentItem + "");
+            mOrderBiz.listByPage(parms, new CommonCallback<List<Order>>() {
                 @Override
                 public void onError(Exception e) {
                     T.showToast(e.getMessage());
@@ -299,6 +306,24 @@ public class ViewPagerOrderFragment extends Fragment implements OnRefreshListene
                     mAdapter.refresh(mDatas);
                 }
             });
+
+            /*mOrderBiz.listByPage(1, currentItem, new CommonCallback<List<Order>>() {
+                @Override
+                public void onError(Exception e) {
+                    T.showToast(e.getMessage());
+                }
+
+                @Override
+                public void onSuccess(List<Order> response, String info) {
+                    if (response.size() == 0) {
+                        T.showToast("无结果");
+                        return;
+                    }
+                    mDatas.clear();
+                    mDatas.addAll(response);
+                    mAdapter.refresh(mDatas);
+                }
+            });*/
             return mDatas;
         }
 
@@ -307,8 +332,12 @@ public class ViewPagerOrderFragment extends Fragment implements OnRefreshListene
          *
          * @param refreshLayout
          */
-        public void onRefresh(final RefreshLayout refreshLayout, int CurrentItem) {
-            mOrderBiz.listByPage(1, CurrentItem, new CommonCallback<List<Order>>() {
+        public void onRefresh(final RefreshLayout refreshLayout, int currentItem) {
+
+            Map parms = new HashMap();
+            parms.put("currPage", 1 + "");
+            parms.put("orderStatus", currentItem + "");
+            mOrderBiz.listByPage(parms, new CommonCallback<List<Order>>() {
                 @Override
                 public void onError(Exception e) {
                     T.showToast(e.getMessage());
@@ -327,6 +356,7 @@ public class ViewPagerOrderFragment extends Fragment implements OnRefreshListene
                     }
                 }
             });
+
         }
 
         /**
@@ -335,7 +365,11 @@ public class ViewPagerOrderFragment extends Fragment implements OnRefreshListene
          * @param refreshLayout
          */
         public void onLoadMore(final RefreshLayout refreshLayout, int currentItem) {
-            mOrderBiz.listByPage(currPage++, currentItem, new CommonCallback<List<Order>>() {
+            Map parms = new HashMap();
+            parms.put("currPage", currPage++ + "");
+            parms.put("orderStatus", currentItem + "");
+            mOrderBiz.listByPage(parms, new CommonCallback<List<Order>>() {
+                // mOrderBiz.listByPage(currPage++, currentItem, new CommonCallback<List<Order>>() {
                 @Override
                 public void onError(Exception e) {
                     --currPage;
@@ -365,25 +399,30 @@ public class ViewPagerOrderFragment extends Fragment implements OnRefreshListene
          * @param text
          */
         public void searchRefresh(final RefreshLayout refreshLayout, int mType, String text) {
-            mOrderBiz.listByPage(1, this.currentItem, mType, text, new
-                    CommonCallback<List<Order>>() {
-                        @Override
-                        public void onError(Exception e) {
-                            T.showToast(e.getMessage());
-                        }
+            Map parms = new HashMap();
+            parms.put("currPage", 1 + "");
+            parms.put("orderStatus", currentItem + "");
+            parms.put("type", mType + "");
+            parms.put("keywords", text);
+            mOrderBiz.listByPage(parms, new CommonCallback<List<Order>>() {
+                //  mOrderBiz.listByPage(1, this.currentItem, mType, text, new CommonCallback<List<Order>>() {
+                @Override
+                public void onError(Exception e) {
+                    T.showToast(e.getMessage());
+                }
 
-                        @Override
-                        public void onSuccess(List<Order> response, String info) {
-                            if (response.size() == 0) {
-                                T.showToast("无结果");
-                            }
-                            mDatas.clear();
-                            mDatas.addAll(response);
-                            mAdapter.refresh(mDatas);
-                            refreshLayout.finishRefresh();
-                            refreshLayout.setNoMoreData(false);
-                        }
-                    });
+                @Override
+                public void onSuccess(List<Order> response, String info) {
+                    if (response.size() == 0) {
+                        T.showToast("无结果");
+                    }
+                    mDatas.clear();
+                    mDatas.addAll(response);
+                    mAdapter.refresh(mDatas);
+                    refreshLayout.finishRefresh();
+                    refreshLayout.setNoMoreData(false);
+                }
+            });
         }
     }
 }

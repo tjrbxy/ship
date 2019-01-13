@@ -4,7 +4,10 @@
         android:id="@+id/navigation_order"
         android:icon="@drawable/ic_index_dashboard"
         android:title="@string/title_order" />
-
+    <item
+        android:id="@+id/navigation_active"
+        android:icon="@drawable/ic_index_home"
+        android:title="@string/title_active_delivery" />
     <item
         android:id="@+id/navigation_setting"
         android:icon="@drawable/ic_index_notifications"

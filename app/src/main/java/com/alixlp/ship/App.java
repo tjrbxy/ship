@@ -49,5 +49,7 @@ public class App extends Application {
         T.init(this);
         // 本地存储
         SPUtils.init(this, "setting.ay");
+
+
     }
 }

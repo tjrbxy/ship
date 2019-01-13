@@ -10,6 +10,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.telephony.TelephonyManager;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.MenuItem;
@@ -19,7 +20,8 @@ import android.view.WindowManager;
 import com.alixlp.ship.R;
 import com.alixlp.ship.activity.setting.SettingActivity;
 import com.alixlp.ship.config.Config;
-import com.alixlp.ship.fragment.index.RefreshSettingFragment;
+import com.alixlp.ship.fragment.active.ActiveOrderFragment;
+import com.alixlp.ship.fragment.setting.RefreshSettingFragment;
 import com.alixlp.ship.fragment.order.ViewPagerOrderFragment;
 import com.alixlp.ship.util.NetWorkUtils;
 import com.alixlp.ship.util.SPUtils;
@@ -37,6 +39,7 @@ public class IndexMainActivity extends AppCompatActivity implements
 
     private enum TabFragment {
         order(R.id.navigation_order, ViewPagerOrderFragment.class),
+        active(R.id.navigation_active, ActiveOrderFragment.class),
         setting(R.id.navigation_setting, RefreshSettingFragment.class);
 
         private Fragment fragment;
@@ -95,6 +98,14 @@ public class IndexMainActivity extends AppCompatActivity implements
             T.showToast("网络不可用");
             return;
         }
+// 存储设备信息
+        String mImie = (String) SPUtils.getInstance().get("IMIE", "");
+        if (mImie.length() == 0) {
+            TelephonyManager TelephonyMgr = (TelephonyManager) getSystemService(TELEPHONY_SERVICE);
+            mImie = TelephonyMgr.getDeviceId();
+            SPUtils.getInstance().put("IMIE", mImie);
+        }
+
         toActivity();
         setContentView(R.layout.activity_index_main);
 

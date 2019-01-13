@@ -10,6 +10,7 @@ import com.alixlp.ship.util.SPUtils;
 import com.zhy.http.okhttp.OkHttpUtils;
 
 import java.util.List;
+import java.util.Map;
 
 public class OrderBiz {
 
@@ -38,53 +39,32 @@ public class OrderBiz {
     }
 
     /**
-     * 列表
+     * 订单列表-搜索
      *
-     * @param currPage
-     * @param orderStatus
+     * @param parms
      * @param commonCallback
      */
-    public void listByPage(int currPage, int orderStatus, CommonCallback<List<Order>>
-            commonCallback) {
+    public void listByPage(Map parms, CommonCallback<List<Order>> commonCallback) {
         String baseUrl = "http://" + SPUtils.getInstance().get(Config.APIURL, "") +
                 "/api.php";
+        String token = (String) SPUtils.getInstance().get(Config.TOKEN, "");
+        Log.d(TAG, "listByPage-new: " + baseUrl + "/order");
+        parms.put("token", token);
         OkHttpUtils
                 .get()
                 .url(baseUrl + "/order")
                 .tag(this)
-                .addParams("currPage", currPage + "")
-                .addParams("orderStatus", orderStatus + "")
-                .addParams("token", token)
+                .params(parms)
                 .build()
                 .execute(commonCallback);
     }
 
     /**
-     * 搜索
-     *
-     * @param currPage
-     * @param orderStatus
+     * @param oid
+     * @param kid
+     * @param code
      * @param commonCallback
      */
-    public void listByPage(int currPage, int orderStatus, int mType, String text,
-                           CommonCallback<List<Order>>
-                                   commonCallback) {
-        String baseUrl = "http://" + SPUtils.getInstance().get(Config.APIURL, "") +
-                "/api.php";
-        OkHttpUtils
-                .get()
-                .url(baseUrl + "/order")
-                .tag(this)
-                .addParams("currPage", currPage + "")
-                .addParams("type", mType + "")
-                .addParams("keywords", text)
-                .addParams("orderStatus", orderStatus + "")
-                .addParams("token", token)
-                .build()
-                .execute(commonCallback);
-    }
-
-
     public void express(int oid, int kid, String code, CommonCallback<List> commonCallback) {
         String baseUrl = "http://" + SPUtils.getInstance().get(Config.APIURL, "") +
                 "/api.php";
@@ -136,6 +116,47 @@ public class OrderBiz {
                 .url(baseUrl + "/order/scanGoods")
                 .addParams("oid", oid + "")
                 .addParams("token", token)
+                .build()
+                .execute(commonCallback);
+
+    }
+
+
+    /**
+     * 主动发货扫入产品
+     *
+     * @param params
+     * @param commonCallback
+     */
+    public void orderActiveScan(Map params, CommonCallback<List<Goods>> commonCallback) {
+
+        String baseUrl = "http://" + SPUtils.getInstance().get(Config.APIURL, "") +
+                "/api.php";
+        params.put("token", SPUtils.getInstance().get(Config.TOKEN, ""));
+        OkHttpUtils
+                .post()
+                .url(baseUrl + "/goods/goodsCacheList")
+                .params(params)
+                .build()
+                .execute(commonCallback);
+    }
+
+    /**
+     * 确认无误发货
+     *
+     * @param params
+     * @param commonCallback
+     */
+    public void orderActiveSend(Map params, CommonCallback<Order> commonCallback) {
+        String baseUrl = "http://" + SPUtils.getInstance().get(Config.APIURL, "") +
+                "/api.php";
+        params.put("token", SPUtils.getInstance().get(Config.TOKEN, ""));
+        Log.d(TAG, "orderActiveSend: " + baseUrl + "order/orderActiveSend");
+
+        OkHttpUtils
+                .post()
+                .url(baseUrl + "/order/orderActiveSend")
+                .params(params)
                 .build()
                 .execute(commonCallback);
 

@@ -1,4 +1,4 @@
-package com.alixlp.ship.fragment.index;
+package com.alixlp.ship.fragment.setting;
 
 
 import android.app.Activity;

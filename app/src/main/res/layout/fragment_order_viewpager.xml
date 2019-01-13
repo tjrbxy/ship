@@ -49,6 +49,8 @@
         android:layout_height="wrap_content"
         android:background="@color/colorBackground"
         android:orientation="horizontal"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
         android:padding="@dimen/dp_4">
 
         <EditText
