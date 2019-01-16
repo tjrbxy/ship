@@ -48,7 +48,7 @@ public class OrderBiz {
         String baseUrl = "http://" + SPUtils.getInstance().get(Config.APIURL, "") +
                 "/api.php";
         String token = (String) SPUtils.getInstance().get(Config.TOKEN, "");
-        Log.d(TAG, "listByPage-new: " + baseUrl + "/order");
+        Log.d(TAG, "listByPage-new: " + baseUrl + "/order/" + parms);
         parms.put("token", token);
         OkHttpUtils
                 .get()

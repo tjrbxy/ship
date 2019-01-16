@@ -51,7 +51,7 @@ import static com.alixlp.ship.R.id.refreshLayout;
 public class ViewPagerOrderFragment extends Fragment implements OnRefreshListener,
         OnRefreshLoadMoreListener {
 
-    private static final String TAG = "ViewPagerOrderFragment-app";
+    private static final String TAG = "OrderFragment-app";
 
     public enum Item {
         NestedShipped("待发货", SmartFragment.class),
@@ -71,7 +71,7 @@ public class ViewPagerOrderFragment extends Fragment implements OnRefreshListene
     private TabLayout mTabLayout;
     private ViewPager mViewPager;
     private RefreshLayout mRefreshLayout;
-    private ViewPagerAdapter mViewPagerAdapter;
+    private SmartPagerAdapter mAdapter;
     // 搜索
     private RadioGroup mRadioGroup; // 单选按钮
     private int mType = 1; // 时间范围类型 1近30天，2 全部时间
@@ -96,31 +96,23 @@ public class ViewPagerOrderFragment extends Fragment implements OnRefreshListene
 
         mViewPager = (ViewPager) root.findViewById(R.id.viewPager);
         mTabLayout = (TabLayout) root.findViewById(R.id.tableLayout);
+        mRadioGroup = (RadioGroup) root.findViewById(R.id.RadioGroup);
+        mEditText = (EditText) root.findViewById(R.id.search_txt);
+        mImageButton = root.findViewById(R.id.searchBt);
+
         // viewPager 适配器
-        mViewPagerAdapter = new ViewPagerAdapter(Item.values());
-        mViewPager.setAdapter(mViewPagerAdapter);
-        // mViewPager.setOffscreenPageLimit(1);
-        mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+        mAdapter = new SmartPagerAdapter(Item.values());
+        mViewPager.setAdapter(mAdapter);
+        mViewPager.setOffscreenPageLimit(2);
+        // 切换页面
+        mViewPager.addOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
             @Override
-            public void onPageScrolled(int i, float v, int i1) {
-
-            }
-
-            @Override
-            public void onPageSelected(int i) {
-                // mRefreshLayout.autoRefresh();  // 选中自动刷新
-            }
-
-            @Override
-            public void onPageScrollStateChanged(int i) {
-
+            public void onPageSelected(int position) {
+                mRefreshLayout.autoRefresh();  // 选中自动刷新
             }
         });
         mTabLayout.setupWithViewPager(mViewPager, true);
 
-        mRadioGroup = (RadioGroup) root.findViewById(R.id.RadioGroup);
-        mEditText = (EditText) root.findViewById(R.id.search_txt);
-        mImageButton = root.findViewById(R.id.searchBt);
 
         // 时间范围切换
         mRadioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
@@ -141,7 +133,7 @@ public class ViewPagerOrderFragment extends Fragment implements OnRefreshListene
                 if (text.equals("")) {
                     T.showToast("请输入搜索条件");
                 }
-                mViewPagerAdapter.fragments[mViewPager.getCurrentItem()]
+                mAdapter.fragments[mViewPager.getCurrentItem()]
                         .searchRefresh(mRefreshLayout, mType, text);
 
             }
@@ -154,39 +146,38 @@ public class ViewPagerOrderFragment extends Fragment implements OnRefreshListene
     @Override
     public void onResume() {
         super.onResume();
-/*        if( mRefreshLayout != null)
-            mRefreshLayout.autoRefresh(); // 自动刷新*/
+        mRefreshLayout.autoRefresh(); // 自动刷新
     }
 
-    // 下拉刷新代码
+    // 下拉刷新代码 先执行
     @Override
-    public void onRefresh(RefreshLayout refreshLayout) {
-
-        mViewPagerAdapter.fragments[mViewPager.getCurrentItem()]
-                .onRefresh(refreshLayout, mViewPager.getCurrentItem());
+    public void onRefresh(@NonNull RefreshLayout refreshLayout) {
+        mAdapter.getItem(mViewPager.getCurrentItem());
+        mAdapter.fragments[mViewPager.getCurrentItem()]
+                .onRefresh(refreshLayout);
 
     }
 
     /**
-     * 上拉加载
+     * 上拉加载 先执行
      *
      * @param refreshLayout
      */
     @Override
-    public void onLoadMore(RefreshLayout refreshLayout) {
-        mViewPagerAdapter.fragments[mViewPager.getCurrentItem()]
-                .onLoadMore(refreshLayout, mViewPager.getCurrentItem());
+    public void onLoadMore(@NonNull RefreshLayout refreshLayout) {
+        mAdapter.fragments[mViewPager.getCurrentItem()]
+                .onLoadMore(refreshLayout);
     }
 
     /**
      * ViewPager 适配器
      */
-    private class ViewPagerAdapter extends FragmentStatePagerAdapter {
+    private class SmartPagerAdapter extends FragmentStatePagerAdapter {
 
         private final Item[] items;
         private final SmartFragment[] fragments;
 
-        ViewPagerAdapter(Item... items) {
+        SmartPagerAdapter(Item... items) {
             super(getChildFragmentManager());
             this.items = items;
             this.fragments = new SmartFragment[items.length];
@@ -205,7 +196,8 @@ public class ViewPagerOrderFragment extends Fragment implements OnRefreshListene
         @Override
         public Fragment getItem(int position) {
             if (fragments[position] == null) {
-                fragments[position] = new SmartFragment(position);
+                fragments[position] = new SmartFragment();
+                fragments[position].setCurrentItem(position);
             }
             return fragments[position];
         }
@@ -216,16 +208,19 @@ public class ViewPagerOrderFragment extends Fragment implements OnRefreshListene
         private RecyclerView mRecyclerView;
         private BaseRecyclerAdapter<Order> mAdapter;
         private List<Order> mDatas = new ArrayList<>();
-        private int currPage = 2;
+        private int currPage;
         private int currentItem;
+
+        public int getCurrentItem() {
+            return currentItem;
+        }
+
+        public void setCurrentItem(int currentItem) {
+            this.currentItem = currentItem;
+        }
 
         public SmartFragment() {
 
-        }
-
-        @SuppressLint("ValidFragment")
-        public SmartFragment(int currentItem) {
-            this.currentItem = currentItem;
         }
 
         @Override
@@ -244,8 +239,6 @@ public class ViewPagerOrderFragment extends Fragment implements OnRefreshListene
             mRecyclerView.addItemDecoration(new DividerItemDecoration(getContext(),
                     DividerItemDecoration.VERTICAL));
             // 加载数据
-            // if (this.currentItem == 0)
-            loadData(this.currentItem);
             mAdapter = new BaseRecyclerAdapter<Order>(mDatas, R.layout.item_order_list, this) {
                 @Override
                 protected void onBindViewHolder(SmartViewHolder holder, Order model, int position) {
@@ -268,8 +261,15 @@ public class ViewPagerOrderFragment extends Fragment implements OnRefreshListene
 
         }
 
+        /**
+         * 跳转详情页
+         *
+         * @param parent
+         * @param view
+         * @param position
+         * @param id
+         */
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
             Intent intent = new Intent(getActivity(), OrderDetailActivity.class);
             Bundle bundle = new Bundle();
             bundle.putInt("OID", mDatas.get(position).getId());
@@ -280,62 +280,14 @@ public class ViewPagerOrderFragment extends Fragment implements OnRefreshListene
         }
 
         /**
-         * 加载第一页数据
-         *
-         * @return
-         */
-        private List<Order> loadData(int currentItem) {
-
-            Map parms = new HashMap();
-            parms.put("currPage", 1 + "");
-            parms.put("orderStatus", currentItem + "");
-            mOrderBiz.listByPage(parms, new CommonCallback<List<Order>>() {
-                @Override
-                public void onError(Exception e) {
-                    T.showToast(e.getMessage());
-                }
-
-                @Override
-                public void onSuccess(List<Order> response, String info) {
-                    if (response.size() == 0) {
-                        T.showToast("无结果");
-                        return;
-                    }
-                    mDatas.clear();
-                    mDatas.addAll(response);
-                    mAdapter.refresh(mDatas);
-                }
-            });
-
-            /*mOrderBiz.listByPage(1, currentItem, new CommonCallback<List<Order>>() {
-                @Override
-                public void onError(Exception e) {
-                    T.showToast(e.getMessage());
-                }
-
-                @Override
-                public void onSuccess(List<Order> response, String info) {
-                    if (response.size() == 0) {
-                        T.showToast("无结果");
-                        return;
-                    }
-                    mDatas.clear();
-                    mDatas.addAll(response);
-                    mAdapter.refresh(mDatas);
-                }
-            });*/
-            return mDatas;
-        }
-
-        /**
          * 下拉刷新
          *
          * @param refreshLayout
          */
-        public void onRefresh(final RefreshLayout refreshLayout, int currentItem) {
-
+        public void onRefresh(final RefreshLayout refreshLayout) {
+            currPage = 1;
             Map parms = new HashMap();
-            parms.put("currPage", 1 + "");
+            parms.put("currPage", currPage++ + "");
             parms.put("orderStatus", currentItem + "");
             mOrderBiz.listByPage(parms, new CommonCallback<List<Order>>() {
                 @Override
@@ -346,14 +298,17 @@ public class ViewPagerOrderFragment extends Fragment implements OnRefreshListene
                 @Override
                 public void onSuccess(List<Order> response, String info) {
                     mDatas.clear();
+                    mDatas.addAll(response);
                     if (response.size() == 0) {
-                        T.showToast("无结果");
+                        refreshLayout.finishRefresh();
+                        refreshLayout.setNoMoreData(false);
+                        T.showToast("暂无订单！");
                     } else {
-                        mDatas.addAll(response);
-                        mAdapter.refresh(mDatas);
+                        mAdapter.refresh(response);
                         refreshLayout.finishRefresh();
                         refreshLayout.setNoMoreData(false);
                     }
+
                 }
             });
 
@@ -364,12 +319,11 @@ public class ViewPagerOrderFragment extends Fragment implements OnRefreshListene
          *
          * @param refreshLayout
          */
-        public void onLoadMore(final RefreshLayout refreshLayout, int currentItem) {
+        public void onLoadMore(final RefreshLayout refreshLayout) {
             Map parms = new HashMap();
             parms.put("currPage", currPage++ + "");
             parms.put("orderStatus", currentItem + "");
             mOrderBiz.listByPage(parms, new CommonCallback<List<Order>>() {
-                // mOrderBiz.listByPage(currPage++, currentItem, new CommonCallback<List<Order>>() {
                 @Override
                 public void onError(Exception e) {
                     --currPage;
@@ -378,14 +332,13 @@ public class ViewPagerOrderFragment extends Fragment implements OnRefreshListene
 
                 @Override
                 public void onSuccess(List<Order> response, String info) {
-                    if (response.size() == 0) {
-                        T.showToast("数据全部加载完毕");
+                    if (response.size() < 10) {
                         refreshLayout.finishLoadMoreWithNoMoreData();//将不会再次触发加载更多事件
-                    } else {
-                        mDatas.addAll(response);
-                        mAdapter.loadMore(mDatas);
-                        refreshLayout.finishLoadMore();
+                        T.showToast("数据全部加载完毕");
                     }
+                    mDatas.addAll(response);
+                    mAdapter.loadMore(response);
+                    refreshLayout.finishLoadMore();
                 }
             });
         }
@@ -405,7 +358,6 @@ public class ViewPagerOrderFragment extends Fragment implements OnRefreshListene
             parms.put("type", mType + "");
             parms.put("keywords", text);
             mOrderBiz.listByPage(parms, new CommonCallback<List<Order>>() {
-                //  mOrderBiz.listByPage(1, this.currentItem, mType, text, new CommonCallback<List<Order>>() {
                 @Override
                 public void onError(Exception e) {
                     T.showToast(e.getMessage());
@@ -413,11 +365,6 @@ public class ViewPagerOrderFragment extends Fragment implements OnRefreshListene
 
                 @Override
                 public void onSuccess(List<Order> response, String info) {
-                    if (response.size() == 0) {
-                        T.showToast("无结果");
-                    }
-                    mDatas.clear();
-                    mDatas.addAll(response);
                     mAdapter.refresh(mDatas);
                     refreshLayout.finishRefresh();
                     refreshLayout.setNoMoreData(false);

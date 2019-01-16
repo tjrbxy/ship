@@ -70,7 +70,7 @@ public class IndexMainActivity extends AppCompatActivity implements
                     return fragment;
                 }
             }
-            return order;
+            return active;
         }
 
         public static void onDestroy() {
@@ -177,6 +177,5 @@ public class IndexMainActivity extends AppCompatActivity implements
             finish();
             return;
         }
-        Log.d(TAG, "toActivity: end userid = " + userId + ",token =" + token);
     }
 }

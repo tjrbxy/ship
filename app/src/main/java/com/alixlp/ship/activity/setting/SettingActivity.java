@@ -11,16 +11,11 @@ import android.widget.EditText;
 import com.alixlp.ship.R;
 import com.alixlp.ship.activity.BaseActivity;
 import com.alixlp.ship.activity.IndexMainActivity;
-import com.alixlp.ship.activity.LoginActivity;
-import com.alixlp.ship.bean.User;
 import com.alixlp.ship.biz.UserBiz;
 import com.alixlp.ship.config.Config;
-import com.alixlp.ship.net.CommonCallback;
 import com.alixlp.ship.util.SPUtils;
 import com.alixlp.ship.util.T;
 import com.suke.widget.SwitchButton;
-
-import java.util.List;
 
 
 public class SettingActivity extends BaseActivity {
