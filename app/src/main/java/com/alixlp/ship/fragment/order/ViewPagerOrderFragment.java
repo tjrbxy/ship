@@ -299,16 +299,12 @@ public class ViewPagerOrderFragment extends Fragment implements OnRefreshListene
                 public void onSuccess(List<Order> response, String info) {
                     mDatas.clear();
                     mDatas.addAll(response);
+                    mAdapter.refresh(response);
+                    refreshLayout.finishRefresh();
+                    refreshLayout.setNoMoreData(false);
                     if (response.size() == 0) {
-                        refreshLayout.finishRefresh();
-                        refreshLayout.setNoMoreData(false);
                         T.showToast("暂无订单！");
-                    } else {
-                        mAdapter.refresh(response);
-                        refreshLayout.finishRefresh();
-                        refreshLayout.setNoMoreData(false);
                     }
-
                 }
             });
 

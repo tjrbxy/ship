@@ -42,7 +42,7 @@ public class OrderDetailActivity extends BaseActivity {
     private boolean isScaning = false;
     // 扫码声音
     private int soundid, sendSuccessSoundid, inputSuccessSoundid, boxCodeRepeatSoundid,
-            repeatedSweepCodeSoundid, scanOtherGoodsSoundid;
+            repeatedSweepCodeSoundid, scanOtherGoodsSoundid, singleSoundid;
 
     private static final String TAG = "OrderDetailActivity-app";
     private OrderBiz mOrderBiz = new OrderBiz();
@@ -109,6 +109,9 @@ public class OrderDetailActivity extends BaseActivity {
                                 } else if (code.equals("103")) {
                                     // 扫入其他产品
                                     soundpool.play(scanOtherGoodsSoundid, 1, 1, 0, 0, 1);
+                                } else if (code.equals("104")) {
+                                    // 扫入其他产品
+                                    soundpool.play(singleSoundid, 1, 1, 0, 0, 1);
                                 }
                                 Log.d(TAG, "onSuccess: " + info);
 
@@ -284,6 +287,7 @@ public class OrderDetailActivity extends BaseActivity {
             // 请勿重复扫码
             scanOtherGoodsSoundid = soundpool.load(this, R.raw.ctscanothergoodssoundid, 1); //
             // 扫入其他产品
+            singleSoundid = soundpool.load(this, R.raw.ctsingle, 1); // 不足一箱
         } else {
             // 普通话
             sendSuccessSoundid = soundpool.load(this, R.raw.sendsuccesssoundid, 1); // 发货成功
@@ -293,6 +297,7 @@ public class OrderDetailActivity extends BaseActivity {
             // 请勿重复扫码
             scanOtherGoodsSoundid = soundpool.load(this, R.raw.scanothergoodssoundid, 1); //
             // 扫入其他产品
+            singleSoundid = soundpool.load(this, R.raw.single, 1); // 不足一箱 104
         }
         mScanGoods.setText("");
         IntentFilter filter = new IntentFilter();
