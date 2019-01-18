@@ -48,9 +48,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/colorBackground"
-        android:orientation="horizontal"
         android:focusable="true"
         android:focusableInTouchMode="true"
+        android:orientation="horizontal"
         android:padding="@dimen/dp_4">
 
         <EditText
@@ -59,6 +59,8 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:hint="(收货人,代理)姓名或单号后4位"
+            android:maxLines="1"
+            android:singleLine="true"
             android:textSize="@dimen/sp_14" />
 
         <ImageButton

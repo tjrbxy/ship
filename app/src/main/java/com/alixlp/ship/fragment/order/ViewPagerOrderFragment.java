@@ -1,7 +1,6 @@
 package com.alixlp.ship.fragment.order;
 
 
-import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -14,7 +13,6 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -135,6 +133,7 @@ public class ViewPagerOrderFragment extends Fragment implements OnRefreshListene
                 }
                 mAdapter.fragments[mViewPager.getCurrentItem()]
                         .searchRefresh(mRefreshLayout, mType, text);
+                mEditText.setText("");
 
             }
         });
@@ -152,7 +151,6 @@ public class ViewPagerOrderFragment extends Fragment implements OnRefreshListene
     // 下拉刷新代码 先执行
     @Override
     public void onRefresh(@NonNull RefreshLayout refreshLayout) {
-        mAdapter.getItem(mViewPager.getCurrentItem());
         mAdapter.fragments[mViewPager.getCurrentItem()]
                 .onRefresh(refreshLayout);
 
@@ -220,7 +218,6 @@ public class ViewPagerOrderFragment extends Fragment implements OnRefreshListene
         }
 
         public SmartFragment() {
-
         }
 
         @Override
@@ -361,7 +358,12 @@ public class ViewPagerOrderFragment extends Fragment implements OnRefreshListene
 
                 @Override
                 public void onSuccess(List<Order> response, String info) {
-                    mAdapter.refresh(mDatas);
+                    if (response.size() == 0) {
+                        T.showToast("未找到订单！");
+                    }
+                    mDatas.clear();
+                    mDatas.addAll(response);
+                    mAdapter.refresh(response);
                     refreshLayout.finishRefresh();
                     refreshLayout.setNoMoreData(false);
                 }

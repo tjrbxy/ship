@@ -3,7 +3,7 @@ apply plugin: 'com.android.application'
 android {
 
     compileSdkVersion 28
-    buildToolsVersion '25.0.2'
+    buildToolsVersion '28'
 
     defaultConfig {
         applicationId "com.alixlp.ship"
