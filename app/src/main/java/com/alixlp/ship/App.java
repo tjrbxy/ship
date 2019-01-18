@@ -1,5 +1,6 @@
 package com.alixlp.ship;
 
+import android.app.Activity;
 import android.app.Application;
 import android.content.Context;
 import android.support.annotation.NonNull;
@@ -14,6 +15,8 @@ import com.scwang.smartrefresh.layout.api.RefreshHeader;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.header.ClassicsHeader;
 import com.squareup.leakcanary.LeakCanary;
+
+import java.util.LinkedList;
 
 /**
  * Created by SCWANG on 2017/6/11.
@@ -51,5 +54,59 @@ public class App extends Application {
         SPUtils.init(this, "setting.ay");
 
 
+    }
+
+    private static LinkedList<Activity> actList = new LinkedList<Activity>();
+
+    public LinkedList<Activity> getActivityList() {
+        return actList;
+    }
+
+    /**
+     * 添加
+     *
+     * @param act
+     */
+    public static void addToActivityList(final Activity act) {
+        if (act != null) {
+            actList.add(act);
+        }
+    }
+
+    /**
+     * 删除
+     *
+     * @param act
+     */
+    public static void removeFromActivityList(final Activity act) {
+        if (actList != null && actList.size() > 0 && actList.indexOf(act) != -1) {
+            actList.remove(act);
+        }
+    }
+
+    /**
+     * 清理activity
+     */
+    public static void clearActivityList() {
+        for (int i = actList.size() - 1; i >= 0; i--) {
+            final Activity act = actList.get(i);
+            if (act != null) {
+                act.finish();
+            }
+        }
+    }
+
+    /**
+     * 退出应用
+     */
+    public static void exitApp() {
+        try {
+            clearActivityList();
+        } catch (final Exception e) {
+
+        } finally {
+            System.exit(0);
+            android.os.Process.killProcess(android.os.Process.myPid());
+        }
     }
 }
