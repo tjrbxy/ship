@@ -8,7 +8,7 @@ import com.zhy.http.okhttp.OkHttpUtils;
 
 import java.util.List;
 
-public class UserBiz {
+public class UserBiz extends BaseBiz {
     private static final String TAG = "UserBiz-app";
 
     /**
@@ -19,11 +19,10 @@ public class UserBiz {
      * @param commonCallback
      */
     public void login(String username, String password, CommonCallback<User> commonCallback) {
-        String baseUrl = "http://" + SPUtils.getInstance().get(Config.APIURL, "") +
-                "/api.php";
+
         OkHttpUtils
                 .post()
-                .url(baseUrl + "/login")
+                .url(this.BASE_API + "/login")
                 .tag(this)
                 .addParams("username", username)
                 .addParams("password", password)
@@ -37,13 +36,12 @@ public class UserBiz {
      * @param commonCallback
      */
     public void logout(CommonCallback<List> commonCallback) {
-        String baseUrl = "http://" + SPUtils.getInstance().get(Config.APIURL, "") +
-                "/api.php";
+
         String token = (String) SPUtils.getInstance().get(Config.TOKEN, "");
 
         OkHttpUtils
                 .get()
-                .url(baseUrl + "/login/logout")
+                .url(this.BASE_API + "/login/logout")
                 .tag(this)
                 .addParams("token", token)
                 .build()

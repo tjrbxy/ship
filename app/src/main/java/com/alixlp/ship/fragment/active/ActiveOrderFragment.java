@@ -109,7 +109,7 @@ public class ActiveOrderFragment extends Fragment {
                             T.showToast(info);
                         }
                     } else {
-                        // soundpool.play(scanOtherGoodsSoundid, 1, 1, 1, 1, 1); // 产品已扫足
+                        // 产品已扫足
                         SPUtils.getInstance().put("active", ActivieScan + "," + barcodeStr);
                     }
                     String scanInfo = "";
