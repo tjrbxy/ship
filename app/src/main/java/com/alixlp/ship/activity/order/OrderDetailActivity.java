@@ -30,8 +30,10 @@ import com.alixlp.ship.util.T;
 
 import java.util.List;
 
-public class OrderDetailActivity extends BaseActivity {
+import butterknife.BindView;
+import butterknife.ButterKnife;
 
+public class OrderDetailActivity extends BaseActivity {
     private final static String SCAN_ACTION = ScanManager.ACTION_DECODE;
     private final String KUAIDIID = "kuaidiid";
 
@@ -46,13 +48,22 @@ public class OrderDetailActivity extends BaseActivity {
 
     private static final String TAG = "OrderDetailActivity-app";
     private OrderBiz mOrderBiz = new OrderBiz();
-    private TextView mOrderId; // 订单号
-    private TextView mAddTime; //下单时间
-    private TextView mName;   //下单人
-    private TextView mTel; // 电话
-    private TextView mAddress; // 地址
-    private TextView mGoods;  // 商品信息
-    private TextView mScanGoods; // 掃入信息
+    
+    @BindView(R.id.id_tv_order_sn)
+    TextView mOrderId; // 订单号
+
+    @BindView(R.id.id_tv_add_time)
+    TextView mAddTime; //下单时间
+    @BindView(R.id.id_tv_name)
+    TextView mName;   //下单人
+    @BindView(R.id.id_tv_tel)
+    TextView mTel; // 电话
+    @BindView(R.id.id_tv_address)
+    TextView mAddress; // 地址
+    @BindView(R.id.id_tv_goods)
+    TextView mGoods;  // 商品信息
+    @BindView(R.id.id_tv_scan_goods)
+    TextView mScanGoods; // 掃入信息
 
     private int oid;
     private int orderStatus;
@@ -171,6 +182,9 @@ public class OrderDetailActivity extends BaseActivity {
         Window window = getWindow();
         window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         setContentView(R.layout.activity_order_detail);
+        // 绑定ID
+        ButterKnife.bind(this);
+
         final Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
@@ -194,13 +208,13 @@ public class OrderDetailActivity extends BaseActivity {
                 break;
         }
         toolbar.setTitle(title);
-        mOrderId = findViewById(R.id.id_tv_order_sn);
+        /*mOrderId = findViewById(R.id.id_tv_order_sn);
         mAddTime = findViewById(R.id.id_tv_add_time);
         mName = findViewById(R.id.id_tv_name);
         mTel = findViewById(R.id.id_tv_tel);
         mAddress = findViewById(R.id.id_tv_address);
         mGoods = findViewById(R.id.id_tv_goods);
-        mScanGoods = findViewById(R.id.id_tv_scan_goods);
+        mScanGoods = findViewById(R.id.id_tv_scan_goods);*/
 
         mVibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
 
@@ -241,7 +255,7 @@ public class OrderDetailActivity extends BaseActivity {
             mOrderBiz.scanGoods(oid, new CommonCallback<List<Goods>>() {
                 @Override
                 public void onError(Exception e) {
-                    Log.d(TAG, "onError: " + e.getMessage());
+                    Log.e(TAG, "onError: " + e.getMessage());
                     T.showToast(e.getMessage());
                 }
 
