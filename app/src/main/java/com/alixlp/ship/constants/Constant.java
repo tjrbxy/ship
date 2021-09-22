@@ -1,6 +1,7 @@
-package com.alixlp.ship.config;
+package com.alixlp.ship.constants;
 
-public class Config {
+
+public class Constant {
     public static final String TOKEN = "mToken";
     public static final String APIURL = "mApiUrl";
     public static final String USERID = "mUserId";

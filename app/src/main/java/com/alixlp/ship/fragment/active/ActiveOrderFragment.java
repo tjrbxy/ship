@@ -29,14 +29,11 @@ import com.alixlp.ship.bean.Goods;
 import com.alixlp.ship.bean.Order;
 import com.alixlp.ship.biz.AgentBiz;
 import com.alixlp.ship.biz.OrderBiz;
-import com.alixlp.ship.config.Config;
+import com.alixlp.ship.constants.Constant;
 import com.alixlp.ship.net.CommonCallback;
 import com.alixlp.ship.util.SPUtils;
 import com.alixlp.ship.util.T;
 
-import org.apache.http.params.HttpParams;
-
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -215,7 +212,7 @@ public class ActiveOrderFragment extends Fragment {
 
                     @Override
                     public void onSuccess(Order response, String info) {
-                        Log.d(TAG, "onSuccess: " + response.getOrderid());
+                        Log.i(TAG, "onSuccess: " + response.toString());
                         T.showToast("发货完成，单号为：" + response.getOrderid());
                         SPUtils.getInstance().put("active", "");
                         mScanGoods.setText("");
@@ -223,7 +220,8 @@ public class ActiveOrderFragment extends Fragment {
                         mConsigneeName.setText("");
                         mUserId.setText("");
                         soundpool.play(sendSuccessSoundid, 1, 1, 0, 0, 1);// 发货成功
-                        mUserId.requestFocus(); // 重新聚焦
+                        mUserId.setFocusable(true); // 重新聚焦
+                        mUserId.setFocusableInTouchMode(true); // 触摸是起作用
                     }
                 });
             }
@@ -253,6 +251,7 @@ public class ActiveOrderFragment extends Fragment {
 
     @Override
     public void onResume() {
+        Log.i(TAG, "onResume:  xxxx ");
         super.onResume();
         mScanManager = new ScanManager();
         mScanManager.openScanner();
@@ -260,7 +259,7 @@ public class ActiveOrderFragment extends Fragment {
         soundpool = new SoundPool(1, AudioManager.STREAM_NOTIFICATION, 100); // MODE_RINGTONE
         soundid = soundpool.load("/etc/Scan_new.ogg", 1);
         // 判断当前语言种类
-        if ((Boolean) SPUtils.getInstance().get(Config.LANGUAGE, false)) {
+        if ((Boolean) SPUtils.getInstance().get(Constant.LANGUAGE, false)) {
             // 粤语
             sendSuccessSoundid = soundpool.load(getActivity(), R.raw.ctsendsuccesssoundid, 1); // 发货成功
             boxCodeRepeatSoundid = soundpool.load(getActivity(), R.raw.ctboxcoderepeatsoundid, 1); //外箱码重复

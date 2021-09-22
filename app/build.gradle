@@ -9,8 +9,8 @@ android {
         applicationId "com.alixlp.ship"
         minSdkVersion 15
         targetSdkVersion 28
-        versionCode 2
-        versionName "1.0.1"
+        versionCode 3
+        versionName "1.0.2"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
 
@@ -20,6 +20,18 @@ android {
 
     }
     signingConfigs {
+        debug {
+            storeFile file('/Users/abel.tang/data/app/wangxiaoyang.keystore')
+            storePassword '123456'
+            keyPassword '123456'
+            keyAlias '扫码装箱'
+        }
+        release {
+            storeFile file('/Users/abel.tang/data/app/wangxiaoyang.keystore')
+            storePassword '123456'
+            keyPassword '123456'
+            keyAlias '扫码装箱'
+        }
     }
     buildTypes {
         debug {
@@ -31,15 +43,30 @@ android {
             signingConfig = signingConfigs.debug
         }
     }
+    flavorDimensions "channel"
+    /**
+     * 渠道打包
+     */
+    productFlavors{
+        qita{
+            dimension "channel"
+        }
+    }
+    productFlavors.all {
+        flavor -> flavor.manifestPlaceholders = [UMENG_CHANNEL_VALUE: name]
+    }
+    applicationVariants.all { variant ->
+        variant.outputs.all { output ->
+            println(output.baseName)
+            def fileName = "ship-v${defaultConfig.versionName}-${output.baseName}.apk"
+            outputFileName = fileName
+        }
+    }
     lintOptions {
         abortOnError false
     }
 }
 
-
-repositories {
-    maven { url "https://jitpack.io" }
-}
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
@@ -81,4 +108,6 @@ dependencies {
 
     testCompileOnly 'org.projectlombok:lombok:1.18.16'
     testAnnotationProcessor 'org.projectlombok:lombok:1.18.16'
+
+    implementation 'com.alibaba:fastjson:1.2.9'
 }

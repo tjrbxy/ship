@@ -1,7 +1,7 @@
 package com.alixlp.ship.biz;
 
 import com.alixlp.ship.bean.User;
-import com.alixlp.ship.config.Config;
+import com.alixlp.ship.constants.Constant;
 import com.alixlp.ship.net.CommonCallback;
 import com.alixlp.ship.util.SPUtils;
 import com.zhy.http.okhttp.OkHttpUtils;
@@ -37,7 +37,7 @@ public class UserBiz extends BaseBiz {
      */
     public void logout(CommonCallback<List> commonCallback) {
 
-        String token = (String) SPUtils.getInstance().get(Config.TOKEN, "");
+        String token = (String) SPUtils.getInstance().get(Constant.TOKEN, "");
 
         OkHttpUtils
                 .get()

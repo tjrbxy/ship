@@ -9,3 +9,4 @@ gradle
 /gradle.properties
 /bintrayUpload-key.bat
 *.zip
+app/build/*

@@ -23,7 +23,7 @@ import com.alixlp.ship.activity.BaseActivity;
 import com.alixlp.ship.bean.Goods;
 import com.alixlp.ship.bean.Order;
 import com.alixlp.ship.biz.OrderBiz;
-import com.alixlp.ship.config.Config;
+import com.alixlp.ship.constants.Constant;
 import com.alixlp.ship.net.CommonCallback;
 import com.alixlp.ship.util.SPUtils;
 import com.alixlp.ship.util.T;
@@ -204,7 +204,7 @@ public class OrderDetailActivity extends BaseActivity {
 
         mVibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
 
-        mKuaiDiID = (int) SPUtils.getInstance().get(Config.KUAIDIID, 0); // 管理員綁定的快遞ID
+        mKuaiDiID = (int) SPUtils.getInstance().get(Constant.KUAIDIID, 0); // 管理員綁定的快遞ID
 
 
     }
@@ -278,7 +278,7 @@ public class OrderDetailActivity extends BaseActivity {
         soundpool = new SoundPool(1, AudioManager.STREAM_NOTIFICATION, 100); // MODE_RINGTONE
         soundid = soundpool.load("/etc/Scan_new.ogg", 1);
         // 判断当前语言种类
-        if ((Boolean) SPUtils.getInstance().get(Config.LANGUAGE, false)) {
+        if ((Boolean) SPUtils.getInstance().get(Constant.LANGUAGE, false)) {
             // 粤语
             sendSuccessSoundid = soundpool.load(this, R.raw.ctsendsuccesssoundid, 1); // 发货成功
             boxCodeRepeatSoundid = soundpool.load(this, R.raw.ctboxcoderepeatsoundid, 1); //外箱码重复

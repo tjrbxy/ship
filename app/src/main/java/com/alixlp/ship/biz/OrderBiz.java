@@ -4,7 +4,7 @@ import android.util.Log;
 
 import com.alixlp.ship.bean.Goods;
 import com.alixlp.ship.bean.Order;
-import com.alixlp.ship.config.Config;
+import com.alixlp.ship.constants.Constant;
 import com.alixlp.ship.net.CommonCallback;
 import com.alixlp.ship.util.SPUtils;
 import com.zhy.http.okhttp.OkHttpUtils;
@@ -15,7 +15,7 @@ import java.util.Map;
 public class OrderBiz extends BaseBiz {
 
     private static final String TAG = "OrderBiz-app";
-    private final String token = (String) SPUtils.getInstance().get(Config.TOKEN, "");
+    private final String token = (String) SPUtils.getInstance().get(Constant.TOKEN, "");
 
     /**
      * 订单详情页
@@ -26,7 +26,7 @@ public class OrderBiz extends BaseBiz {
     public void orderDetail(int oid, CommonCallback<Order> commonCallback) {
 
         Log.d(TAG, "orderDetail: " + this.BASE_API);
-        String token = (String) SPUtils.getInstance().get(Config.TOKEN, "");
+        String token = (String) SPUtils.getInstance().get(Constant.TOKEN, "");
         OkHttpUtils
                 .get()
                 .url(this.BASE_API + "/order/detail")
@@ -45,7 +45,7 @@ public class OrderBiz extends BaseBiz {
      */
     public void listByPage(Map parms, CommonCallback<List<Order>> commonCallback) {
 
-        String token = (String) SPUtils.getInstance().get(Config.TOKEN, "");
+        String token = (String) SPUtils.getInstance().get(Constant.TOKEN, "");
         Log.d(TAG, "listByPage-new: " + this.BASE_API + "/order/" + parms);
         parms.put("token", token);
         OkHttpUtils
@@ -125,7 +125,7 @@ public class OrderBiz extends BaseBiz {
      */
     public void orderActiveScan(Map params, CommonCallback<List<Goods>> commonCallback) {
 
-        params.put("token", SPUtils.getInstance().get(Config.TOKEN, ""));
+        params.put("token", SPUtils.getInstance().get(Constant.TOKEN, ""));
         OkHttpUtils
                 .post()
                 .url(this.BASE_API + "/goods/goodsCacheList")

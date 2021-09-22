@@ -19,7 +19,7 @@ import android.view.WindowManager;
 
 import com.alixlp.ship.R;
 import com.alixlp.ship.activity.setting.SettingActivity;
-import com.alixlp.ship.config.Config;
+import com.alixlp.ship.constants.Constant;
 import com.alixlp.ship.fragment.active.ActiveOrderFragment;
 import com.alixlp.ship.fragment.setting.RefreshSettingFragment;
 import com.alixlp.ship.fragment.order.ViewPagerOrderFragment;
@@ -161,9 +161,9 @@ public class IndexMainActivity extends AppCompatActivity implements
 
 
     private void toActivity() {
-        String apiUrl = (String) SPUtils.getInstance().get(Config.APIURL, "");
-        String token = (String) SPUtils.getInstance().get(Config.TOKEN, "");
-        Integer userId = (Integer) SPUtils.getInstance().get(Config.USERID, 0);
+        String apiUrl = (String) SPUtils.getInstance().get(Constant.APIURL, "");
+        String token = (String) SPUtils.getInstance().get(Constant.TOKEN, "");
+        Integer userId = (Integer) SPUtils.getInstance().get(Constant.USERID, 0);
 
         if (TextUtils.isEmpty(apiUrl)) {
             Intent intent = new Intent(IndexMainActivity.this, SettingActivity.class);

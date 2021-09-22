@@ -1,7 +1,7 @@
 package com.alixlp.ship.biz;
 
 import com.alixlp.ship.bean.Agent;
-import com.alixlp.ship.config.Config;
+import com.alixlp.ship.constants.Constant;
 import com.alixlp.ship.net.CommonCallback;
 import com.alixlp.ship.util.SPUtils;
 import com.zhy.http.okhttp.OkHttpUtils;
@@ -10,7 +10,7 @@ public class AgentBiz extends BaseBiz {
 
     public void agentInfo(String id, CommonCallback<Agent> commonCallback) {
 
-        String token = (String) SPUtils.getInstance().get(Config.TOKEN, "");
+        String token = (String) SPUtils.getInstance().get(Constant.TOKEN, "");
         OkHttpUtils
                 .get()
                 .url(this.BASE_API + "/user/agentInfo")

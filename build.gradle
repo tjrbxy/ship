@@ -15,8 +15,18 @@ buildscript {
 
 allprojects {
     repositories {
+        maven { url 'https://maven.aliyun.com/repository/public/' }
+        maven { url 'https://maven.aliyun.com/repository/google/' }
+        maven { url 'https://maven.aliyun.com/repository/jcenter' }
+
+        maven { url "https://jitpack.io" }
         jcenter()
         google()
+    }
+    // 设置全局编译器的版本
+    tasks.withType(JavaCompile){
+        sourceCompatibility = JavaVersion.VERSION_1_8
+        targetCompatibility = JavaVersion.VERSION_1_8
     }
     tasks.withType(Javadoc) {
         options {

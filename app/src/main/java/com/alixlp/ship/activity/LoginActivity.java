@@ -11,7 +11,7 @@ import android.widget.EditText;
 import com.alixlp.ship.R;
 import com.alixlp.ship.bean.User;
 import com.alixlp.ship.biz.UserBiz;
-import com.alixlp.ship.config.Config;
+import com.alixlp.ship.constants.Constant;
 import com.alixlp.ship.net.CommonCallback;
 import com.alixlp.ship.util.SPUtils;
 import com.alixlp.ship.util.T;
@@ -64,9 +64,9 @@ public class LoginActivity extends BaseActivity {
                             T.showToast(info);
                         }
                         // 保存用户信息
-                        SPUtils.getInstance().put(Config.TOKEN, response.getToken()); // 記錄Token
-                        SPUtils.getInstance().put(Config.USERID, response.getId());  // 記錄用戶id
-                        SPUtils.getInstance().put(Config.KUAIDIID, response.getKuaidiid()); //
+                        SPUtils.getInstance().put(Constant.TOKEN, response.getToken()); // 記錄Token
+                        SPUtils.getInstance().put(Constant.USERID, response.getId());  // 記錄用戶id
+                        SPUtils.getInstance().put(Constant.KUAIDIID, response.getKuaidiid()); //
                         // 記錄綁定快遞ID
                         // 跳转
                         Intent intent = new Intent(LoginActivity.this, IndexMainActivity.class);
