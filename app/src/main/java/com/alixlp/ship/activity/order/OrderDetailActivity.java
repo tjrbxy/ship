@@ -1,5 +1,6 @@
 package com.alixlp.ship.activity.order;
 
+import android.annotation.SuppressLint;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -49,19 +50,26 @@ public class OrderDetailActivity extends BaseActivity {
     private static final String TAG = "OrderDetailActivity-app";
     private OrderBiz mOrderBiz = new OrderBiz();
     
+    @SuppressLint("NonConstantResourceId")
     @BindView(R.id.id_tv_order_sn)
     TextView mOrderId; // 订单号
 
+    @SuppressLint("NonConstantResourceId")
     @BindView(R.id.id_tv_add_time)
     TextView mAddTime; //下单时间
+    @SuppressLint("NonConstantResourceId")
     @BindView(R.id.id_tv_name)
     TextView mName;   //下单人
+    @SuppressLint("NonConstantResourceId")
     @BindView(R.id.id_tv_tel)
     TextView mTel; // 电话
+    @SuppressLint("NonConstantResourceId")
     @BindView(R.id.id_tv_address)
     TextView mAddress; // 地址
+    @SuppressLint("NonConstantResourceId")
     @BindView(R.id.id_tv_goods)
     TextView mGoods;  // 商品信息
+    @SuppressLint("NonConstantResourceId")
     @BindView(R.id.id_tv_scan_goods)
     TextView mScanGoods; // 掃入信息
 
