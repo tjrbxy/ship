@@ -7,7 +7,7 @@ import com.alixlp.ship.util.SPUtils;
 
 public class BaseBiz {
     private static final String TAG = "BaseBiz-app";
-    protected String BASE_API = "http://" + SPUtils.getInstance().get(Constant.APIURL, "") +
+    protected String BASE_API = "https://" + SPUtils.getInstance().get(Constant.APIURL, "") +
             "/api.php";
     protected String token = null;
 

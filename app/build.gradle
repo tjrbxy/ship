@@ -9,8 +9,8 @@ android {
         applicationId "com.alixlp.ship"
         minSdkVersion 15
         targetSdkVersion 28
-        versionCode 3
-        versionName "1.0.2"
+        versionCode 4
+        versionName "2.0.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
 
@@ -21,13 +21,13 @@ android {
     }
     signingConfigs {
         debug {
-            storeFile file('/Users/abel.tang/data/app/wangxiaoyang.keystore')
+            storeFile file('/Users/abel.tang/workspace/app/wangxiaoyang.keystore')
             storePassword '123456'
             keyPassword '123456'
             keyAlias '扫码装箱'
         }
         release {
-            storeFile file('/Users/abel.tang/data/app/wangxiaoyang.keystore')
+            storeFile file('/Users/abel.tang/workspace/app/wangxiaoyang.keystore')
             storePassword '123456'
             keyPassword '123456'
             keyAlias '扫码装箱'
@@ -36,11 +36,18 @@ android {
     buildTypes {
         debug {
             signingConfig = signingConfigs.debug
+            applicationIdSuffix '.test'
+            manifestPlaceholders = [
+               APP_NAME     : "扫码发货-测试版"
+            ]
         }
         release {
             minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-            signingConfig = signingConfigs.debug
+            signingConfig = signingConfigs.release
+            manifestPlaceholders = [
+               APP_NAME     : "扫码发货"
+            ]
         }
     }
     flavorDimensions "channel"
